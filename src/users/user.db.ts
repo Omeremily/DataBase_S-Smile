@@ -15,6 +15,7 @@ export class UserDB{
 
     async findAll( query= {}, project={}) : Promise<any>{
         try {
+            console.log('find')
             await this.client.connect(); 
             return await this.client.db(this.db_name).collection(this.collection).find(query, {projection: project}).toArray();
         }

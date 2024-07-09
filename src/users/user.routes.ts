@@ -32,6 +32,7 @@ userRouter.get('/:id', getUserById);
 userRouter.post('/add', addUser);
 
 
+
 //methods- after logging in
 userRouter.post('/addUserPhoto', addPhotoToGallery);
 userRouter.delete('/users/:userId/photos/:photoId', deletePhotoFromGallery);

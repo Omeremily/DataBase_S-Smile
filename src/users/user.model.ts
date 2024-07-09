@@ -12,8 +12,11 @@ export type User = {
     isAdmin?: boolean;
 }
 
-export  async function getAllUsers() : Promise<User>{
-        return new UserDB().findAll();
+export  async function getAllUsers() : Promise<User[]>{
+        console.log('first')
+        let users = await new UserDB().findAll();
+        console.log('users', users)
+        return users;
 }
 
 export  async function getUsersByName(userName: string) : Promise<User>{
@@ -58,7 +61,7 @@ export async function loginUser(email: string) : Promise<any>{
 
 
 
-export async function registerUser(user: User){
+export async function registerUser(user: User):Promise<any>{
 
     try{
 
@@ -70,7 +73,10 @@ export async function registerUser(user: User){
         throw new Error("User already exists"); 
     }
 
-    }catch{
+    //הוספת המשתמש
+    return await new UserDB().insertUser(user);
 
+    }catch(error){
+        throw error;
     }
 }
