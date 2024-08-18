@@ -10,6 +10,7 @@ export type User = {
     email: string; // Email should be mandatory for login/register
     address?: string;
     isAdmin?: boolean;
+    weight?: number;
 }
 
 export async function getAllUsers(): Promise<User[]> {
@@ -22,9 +23,9 @@ export async function getAllUsers(): Promise<User[]> {
     }
 }
 
-export async function getUsersByName(userName: string): Promise<User> {
+export async function getUsersByName(firstName: string, lastName: string): Promise<User> {
     try {
-        let query = { name: userName };
+        let query = { firstName, lastName };
         let users: User[] = await new UserDB().findAll(query);
         if (users.length === 0) throw new Error("User not found");
         return users[0];

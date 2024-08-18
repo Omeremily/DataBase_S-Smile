@@ -44,7 +44,7 @@ export class UserDB {
             if (error instanceof Error) {
                 console.error('Error in registerUser');
                 throw error;
-            }
+  }
           }        
     }
 
