@@ -3,7 +3,8 @@ import { UserDB } from "./user.db";
 
 export type User = {
     _id?: ObjectId;
-    name: string;
+    firstName: string;
+    lastName: string;
     password: string; // Password should not be optional if required for registration
     age?: number;
     email: string; // Email should be mandatory for login/register

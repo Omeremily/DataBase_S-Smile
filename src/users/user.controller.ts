@@ -39,12 +39,12 @@ export async function getUserById(req: Request, res: Response) {
 
 export async function addUser(req: Request, res: Response) {
   try {
-    let { name, email, password } = req.body;
-    if (!name || !email || !password) {
+    let { firstName, lastName, email, password, age, address, isAdmin } = req.body;
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: 'Missing information' });
     }
 
-    let user: User = { name, email, password: encryptPassword(password) };
+    let user: User = { firstName, lastName, email, password: encryptPassword(password), age, address, isAdmin };
     let result = await add(user);
 
     if (!result.insertedId) {
@@ -76,24 +76,38 @@ export async function Login(req: Request, res: Response) {
 }
 
 export async function register(req: Request, res: Response) {
-  let { email, password, name, age,  address, isAdmin } = req.body;
-  if (!email || !password || !name) {
-    return res.status(400).json({ error: 'Missing information' });
+  let { email, password, firstName, lastName, age, address, isAdmin } = req.body;
+  if (!email || !password || !firstName || !lastName) {
+    return res.status(400).json({ error: 'Missing information?' });
   }
 
   try {
-    let user: User = { email, password: encryptPassword(password), name, age, address, isAdmin };
+    let user: User = { 
+      email, 
+      password: encryptPassword(password), 
+      firstName, 
+      lastName,
+      age, 
+      address, 
+      isAdmin 
+    };
+    
+    console.log('User object before registration:', user);  // Debug log
+
     let result = await registerUser(user);
     console.log('result ==> ', result);
+    
     if (!result.insertedId) {
       return res.status(400).json({ error: 'Registration failed' });
     }
+    
     user._id = new ObjectId(result.insertedId);
     res.status(201).json({ user });
   } catch (error) {
     res.status(500).json({ error: 'Registration failed' });
   }
 }
+
 
 export function editUser(req: Request, res: Response) {
   try {
