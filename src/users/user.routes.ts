@@ -16,7 +16,8 @@ import {
     getDailyMenu, 
     deleteDailyMenu, 
     editDailyMenu 
-} from './user.controller';
+} 
+from './user.controller';
 
 // create the router object
 const userRouter = Router();

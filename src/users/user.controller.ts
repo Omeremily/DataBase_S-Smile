@@ -93,4 +93,79 @@ export async function register(req: Request, res: Response) {
   } catch (error) {
     res.status(500).json({ error: 'Registration failed' });
   }
+
+  
+}
+
+export function editUser(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "User Updated!" });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+}
+
+export function deleteUser(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "User Deleted!" });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete user' });
+  }
+}
+
+// User actions after login
+export function addPhotoToGallery(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "Photo added to gallery!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add photo to gallery" });
+  }
+}
+
+export function deletePhotoFromGallery(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "Photo deleted from gallery!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete photo from gallery" });
+  }
+}
+
+export function purchaseInStore(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "Purchase successful!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to complete purchase" });
+  }
+}
+
+export function createDailyMenu(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "Daily menu created!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create daily menu" });
+  }
+}
+
+export function getDailyMenu(req: Request, res: Response) {
+  try {
+    res.status(200).json("dailyMenu");
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch daily menu" });
+  }
+}
+
+export function deleteDailyMenu(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "Daily menu deleted!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete daily menu" });
+  }
+}
+
+export function editDailyMenu(req: Request, res: Response) {
+  try {
+    res.status(200).json({ msg: "Daily menu updated!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update daily menu" });
+  }
 }
