@@ -6,6 +6,7 @@ import { decryptPassword, encryptPassword } from '../utils/utils';
 // User CRUD Operations with Express
 export async function getUsers(req: Request, res: Response) {
   try {
+    console.log("hello");
     let users: any = await getAllUsers();
     res.status(200).json(users);
   } catch (error) {
@@ -39,6 +40,7 @@ export async function getUserById(req: Request, res: Response) {
 
 export async function addUser(req: Request, res: Response) {
   try {
+    
     let { firstName, lastName, email, password, age, address, isAdmin, weight } = req.body;
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: 'Missing information' });

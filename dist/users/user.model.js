@@ -1,11 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = getAllUsers;
-exports.getUsersByName = getUsersByName;
-exports.add = add;
-exports.findUsersById = findUsersById;
-exports.loginUser = loginUser;
-exports.registerUser = registerUser;
+exports.registerUser = exports.loginUser = exports.findUsersById = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -18,9 +13,10 @@ async function getAllUsers() {
         throw new Error("Failed to retrieve users");
     }
 }
-async function getUsersByName(userName) {
+exports.getAllUsers = getAllUsers;
+async function getUsersByName(firstName, lastName) {
     try {
-        let query = { name: userName };
+        let query = { firstName, lastName };
         let users = await new user_db_1.UserDB().findAll(query);
         if (users.length === 0)
             throw new Error("User not found");
@@ -31,6 +27,7 @@ async function getUsersByName(userName) {
         throw new Error("User not found");
     }
 }
+exports.getUsersByName = getUsersByName;
 async function add(user) {
     try {
         return await new user_db_1.UserDB().insertUser(user);
@@ -40,6 +37,7 @@ async function add(user) {
         throw new Error("User insertion failed");
     }
 }
+exports.add = add;
 async function findUsersById(id) {
     try {
         let query = { _id: new mongodb_1.ObjectId(id) };
@@ -53,6 +51,7 @@ async function findUsersById(id) {
         throw new Error("User not found");
     }
 }
+exports.findUsersById = findUsersById;
 async function loginUser(email) {
     try {
         let query = { email: email };
@@ -66,6 +65,7 @@ async function loginUser(email) {
         throw new Error("User not found");
     }
 }
+exports.loginUser = loginUser;
 async function registerUser(user) {
     try {
         let query = { email: user.email };
@@ -79,4 +79,5 @@ async function registerUser(user) {
         throw new Error("Registration failed");
     }
 }
+exports.registerUser = registerUser;
 //# sourceMappingURL=user.model.js.map

@@ -1,26 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = getUsers;
-exports.getUsersName = getUsersName;
-exports.getUserById = getUserById;
-exports.addUser = addUser;
-exports.Login = Login;
-exports.register = register;
-exports.editUser = editUser;
-exports.deleteUser = deleteUser;
-exports.addPhotoToGallery = addPhotoToGallery;
-exports.deletePhotoFromGallery = deletePhotoFromGallery;
-exports.purchaseInStore = purchaseInStore;
-exports.createDailyMenu = createDailyMenu;
-exports.getDailyMenu = getDailyMenu;
-exports.deleteDailyMenu = deleteDailyMenu;
-exports.editDailyMenu = editDailyMenu;
+exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
 // User CRUD Operations with Express
 async function getUsers(req, res) {
     try {
+        console.log("hello");
         let users = await (0, user_model_1.getAllUsers)();
         res.status(200).json(users);
     }
@@ -28,16 +15,18 @@ async function getUsers(req, res) {
         res.status(500).json({ error: 'Failed to retrieve users' });
     }
 }
+exports.getUsers = getUsers;
 async function getUsersName(req, res) {
     try {
-        let { userName } = req.params;
-        let user = await (0, user_model_1.getUsersByName)(userName);
+        let { firstName, lastName } = req.params;
+        let user = await (0, user_model_1.getUsersByName)(firstName, lastName);
         res.status(200).json(user);
     }
     catch (error) {
         res.status(500).json({ error: 'User not found' });
     }
 }
+exports.getUsersName = getUsersName;
 async function getUserById(req, res) {
     try {
         let { id } = req.params;
@@ -53,13 +42,14 @@ async function getUserById(req, res) {
         res.status(500).json({ error: 'User not found' });
     }
 }
+exports.getUserById = getUserById;
 async function addUser(req, res) {
     try {
-        let { name, email, password } = req.body;
-        if (!name || !email || !password) {
+        let { firstName, lastName, email, password, age, address, isAdmin, weight } = req.body;
+        if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ error: 'Missing information' });
         }
-        let user = { name, email, password: (0, utils_1.encryptPassword)(password) };
+        let user = { firstName, lastName, email, password: (0, utils_1.encryptPassword)(password), age, address, isAdmin, weight };
         let result = await (0, user_model_1.add)(user);
         if (!result.insertedId) {
             return res.status(400).json({ error: 'User creation failed' });
@@ -71,6 +61,7 @@ async function addUser(req, res) {
         res.status(500).json({ error: 'Failed to add user' });
     }
 }
+exports.addUser = addUser;
 async function Login(req, res) {
     let { email, password } = req.body;
     if (!email || !password) {
@@ -87,14 +78,16 @@ async function Login(req, res) {
         res.status(500).json({ error: 'Login failed' });
     }
 }
+exports.Login = Login;
 async function register(req, res) {
-    let { email, password, name } = req.body;
-    if (!email || !password || !name) {
+    let { email, password, firstName, lastName, age, address, isAdmin, weight } = req.body;
+    if (!email || !password || !firstName || !lastName) {
         return res.status(400).json({ error: 'Missing information' });
     }
     try {
-        let user = { email, password: (0, utils_1.encryptPassword)(password), name };
+        let user = { email, password: (0, utils_1.encryptPassword)(password), firstName, lastName, age, address, isAdmin, weight };
         let result = await (0, user_model_1.registerUser)(user);
+        console.log('result ==> ', result);
         if (!result.insertedId) {
             return res.status(400).json({ error: 'Registration failed' });
         }
@@ -105,6 +98,7 @@ async function register(req, res) {
         res.status(500).json({ error: 'Registration failed' });
     }
 }
+exports.register = register;
 function editUser(req, res) {
     try {
         res.status(200).json({ msg: "User Updated!" });
@@ -113,6 +107,7 @@ function editUser(req, res) {
         res.status(500).json({ error: 'Failed to update user' });
     }
 }
+exports.editUser = editUser;
 function deleteUser(req, res) {
     try {
         res.status(200).json({ msg: "User Deleted!" });
@@ -121,6 +116,7 @@ function deleteUser(req, res) {
         res.status(500).json({ error: 'Failed to delete user' });
     }
 }
+exports.deleteUser = deleteUser;
 // User actions after login
 function addPhotoToGallery(req, res) {
     try {
@@ -130,6 +126,7 @@ function addPhotoToGallery(req, res) {
         res.status(500).json({ error: "Failed to add photo to gallery" });
     }
 }
+exports.addPhotoToGallery = addPhotoToGallery;
 function deletePhotoFromGallery(req, res) {
     try {
         res.status(200).json({ msg: "Photo deleted from gallery!" });
@@ -138,6 +135,7 @@ function deletePhotoFromGallery(req, res) {
         res.status(500).json({ error: "Failed to delete photo from gallery" });
     }
 }
+exports.deletePhotoFromGallery = deletePhotoFromGallery;
 function purchaseInStore(req, res) {
     try {
         res.status(200).json({ msg: "Purchase successful!" });
@@ -146,6 +144,7 @@ function purchaseInStore(req, res) {
         res.status(500).json({ error: "Failed to complete purchase" });
     }
 }
+exports.purchaseInStore = purchaseInStore;
 function createDailyMenu(req, res) {
     try {
         res.status(200).json({ msg: "Daily menu created!" });
@@ -154,6 +153,7 @@ function createDailyMenu(req, res) {
         res.status(500).json({ error: "Failed to create daily menu" });
     }
 }
+exports.createDailyMenu = createDailyMenu;
 function getDailyMenu(req, res) {
     try {
         res.status(200).json("dailyMenu");
@@ -162,6 +162,7 @@ function getDailyMenu(req, res) {
         res.status(500).json({ error: "Failed to fetch daily menu" });
     }
 }
+exports.getDailyMenu = getDailyMenu;
 function deleteDailyMenu(req, res) {
     try {
         res.status(200).json({ msg: "Daily menu deleted!" });
@@ -170,6 +171,7 @@ function deleteDailyMenu(req, res) {
         res.status(500).json({ error: "Failed to delete daily menu" });
     }
 }
+exports.deleteDailyMenu = deleteDailyMenu;
 function editDailyMenu(req, res) {
     try {
         res.status(200).json({ msg: "Daily menu updated!" });
@@ -178,4 +180,5 @@ function editDailyMenu(req, res) {
         res.status(500).json({ error: "Failed to update daily menu" });
     }
 }
+exports.editDailyMenu = editDailyMenu;
 //# sourceMappingURL=user.controller.js.map

@@ -27,12 +27,19 @@ class UserDB {
     }
     async insertUser(user) {
         const client = await getClient();
+        console.log('user', user);
         try {
-            await client.db(this.db_name).collection(this.collection).insertOne(user);
+            const existingUser = await client.db(this.db_name).collection(this.collection).findOne({ email: user.email });
+            if (existingUser) {
+                throw new Error("User already exists");
+            }
+            return await client.db(this.db_name).collection(this.collection).insertOne(user);
         }
         catch (error) {
-            console.error('Error inserting user', error);
-            throw new Error("User insertion failed");
+            if (error instanceof Error) {
+                console.error('Error in registerUser');
+                throw error;
+            }
         }
     }
     async checkIfDocumentExist(query = {}) {
