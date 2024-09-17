@@ -45,11 +45,11 @@ async function getUserById(req, res) {
 exports.getUserById = getUserById;
 async function addUser(req, res) {
     try {
-        let { firstName, lastName, email, password, age, address, isAdmin, weight } = req.body;
+        let { firstName, lastName, email, password, birthDate, isAdmin, currentWeight } = req.body;
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ error: 'Missing information' });
         }
-        let user = { firstName, lastName, email, password: (0, utils_1.encryptPassword)(password), age, address, isAdmin, weight };
+        let user = { firstName, lastName, email, password: (0, utils_1.encryptPassword)(password), birthDate, isAdmin, currentWeight };
         let result = await (0, user_model_1.add)(user);
         if (!result.insertedId) {
             return res.status(400).json({ error: 'User creation failed' });
@@ -80,12 +80,12 @@ async function Login(req, res) {
 }
 exports.Login = Login;
 async function register(req, res) {
-    let { email, password, firstName, lastName, age, address, isAdmin, weight } = req.body;
+    let { email, password, firstName, lastName, birthDate, isAdmin, currentWeight } = req.body;
     if (!email || !password || !firstName || !lastName) {
         return res.status(400).json({ error: 'Missing information' });
     }
     try {
-        let user = { email, password: (0, utils_1.encryptPassword)(password), firstName, lastName, age, address, isAdmin, weight };
+        let user = { email, password: (0, utils_1.encryptPassword)(password), firstName, lastName, birthDate, isAdmin, currentWeight };
         let result = await (0, user_model_1.registerUser)(user);
         console.log('result ==> ', result);
         if (!result.insertedId) {

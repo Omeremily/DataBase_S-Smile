@@ -41,12 +41,12 @@ export async function getUserById(req: Request, res: Response) {
 export async function addUser(req: Request, res: Response) {
   try {
     
-    let { firstName, lastName, email, password, age, address, isAdmin, weight } = req.body;
+    let { firstName, lastName, email, password, birthDate, isAdmin, currentWeight } = req.body;
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: 'Missing information' });
     }
 
-    let user: User = { firstName, lastName, email, password: encryptPassword(password), age, address, isAdmin, weight };
+    let user: User = { firstName, lastName, email, password: encryptPassword(password), birthDate, isAdmin, currentWeight };
     let result = await add(user);
 
     if (!result.insertedId) {
@@ -78,13 +78,13 @@ export async function Login(req: Request, res: Response) {
 }
 
 export async function register(req: Request, res: Response) {
-  let { email, password, firstName, lastName, age, address, isAdmin, weight } = req.body;
+  let { email, password, firstName, lastName, birthDate, isAdmin, currentWeight } = req.body;
   if (!email || !password || !firstName || !lastName) {
     return res.status(400).json({ error: 'Missing information' });
   }
 
   try {
-    let user: User = { email, password: encryptPassword(password), firstName, lastName, age, address, isAdmin, weight };
+    let user: User = { email, password: encryptPassword(password), firstName, lastName, birthDate, isAdmin, currentWeight };
     let result = await registerUser(user);
     console.log('result ==> ', result);
     if (!result.insertedId) {

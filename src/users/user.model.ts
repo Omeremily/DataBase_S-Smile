@@ -6,11 +6,10 @@ export type User = {
     firstName: string;
     lastName: string;
     password: string; // Password should not be optional if required for registration
-    age?: number;
+    birthDate: Date,
     email: string; // Email should be mandatory for login/register
-    address?: string;
     isAdmin?: boolean;
-    weight?: number;
+    currentWeight?: number;
 }
 
 export async function getAllUsers(): Promise<User[]> {
