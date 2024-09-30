@@ -111,7 +111,7 @@ export function editUser(req: Request, res: Response) {
 export async function deleteUser(req: Request, res: Response) {
   try {
     const { email } = req.body;
-    const result = await deleteByEmail(email); // Call the module function to delete the user
+    const result = await deleteByEmail(email); 
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'User not found' });

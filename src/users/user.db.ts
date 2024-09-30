@@ -60,7 +60,7 @@ export class UserDB {
 
 
      async deleteUserByEmail(email: string): Promise<any> {
-        const client = await getClient(); // Get MongoDB client connection
+        const client = await getClient(); 
         try {
           const result = await client.db('your_db_name').collection('users').deleteOne({ email });
           if (result.deletedCount === 0) {

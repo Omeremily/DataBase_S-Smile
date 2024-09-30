@@ -40,7 +40,7 @@ async function add(user) {
 exports.add = add;
 async function deleteByEmail(email) {
     try {
-        return await new user_db_1.UserDB().deleteUserByEmail(email); // Calling DB layer to delete user
+        return await new user_db_1.UserDB().deleteUserByEmail(email);
     }
     catch (error) {
         console.error('Failed to delete user', error);
