@@ -43,6 +43,16 @@ export async function add(user: User): Promise<any> {
     }
 }
 
+export async function deleteByEmail(email: string): Promise<any> {
+    try {
+      return await new UserDB().deleteUserByEmail(email); // Calling DB layer to delete user
+    } catch (error) {
+      console.error('Failed to delete user', error);
+      throw new Error("User deletion failed");
+    }
+  }
+  
+
 export async function findUsersById(id: string): Promise<User> {
     try {
         let query = { _id: new ObjectId(id) };

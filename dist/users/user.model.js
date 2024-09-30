@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = exports.loginUser = exports.findUsersById = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
+exports.registerUser = exports.loginUser = exports.findUsersById = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -38,6 +38,16 @@ async function add(user) {
     }
 }
 exports.add = add;
+async function deleteByEmail(email) {
+    try {
+        return await new user_db_1.UserDB().deleteUserByEmail(email); // Calling DB layer to delete user
+    }
+    catch (error) {
+        console.error('Failed to delete user', error);
+        throw new Error("User deletion failed");
+    }
+}
+exports.deleteByEmail = deleteByEmail;
 async function findUsersById(id) {
     try {
         let query = { _id: new mongodb_1.ObjectId(id) };

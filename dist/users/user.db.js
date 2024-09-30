@@ -52,6 +52,19 @@ class UserDB {
             throw error;
         }
     }
+    async deleteUserByEmail(email) {
+        const client = await getClient(); // Ensure you have the client from MongoDB connection
+        try {
+            return await client.db(this.db_name).collection(this.collection).deleteOne({ email });
+        }
+        catch (error) {
+            console.error('Error in deleteUserByEmail:', error);
+            throw new Error('Failed to delete user by email');
+        }
+        finally {
+            await client.close();
+        }
+    }
 }
 exports.UserDB = UserDB;
 //# sourceMappingURL=user.db.js.map
