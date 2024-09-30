@@ -110,13 +110,18 @@ export function editUser(req: Request, res: Response) {
 
 export async function deleteUser(req: Request, res: Response) {
   try {
-    const { email } = req.body;
-    const result = await deleteByEmail(email); 
+    const { email } = req.body; // The email is passed in the body
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const result = await deleteByEmail(email);
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
-    return res.status(200).json({ message: 'User deleted successfully' });
+
+    res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete user' });
   }

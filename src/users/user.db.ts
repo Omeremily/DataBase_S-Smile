@@ -59,19 +59,16 @@ export class UserDB {
     }
 
 
-     async deleteUserByEmail(email: string): Promise<any> {
-        const client = await getClient(); 
-        try {
-          const result = await client.db('your_db_name').collection('users').deleteOne({ email });
-          if (result.deletedCount === 0) {
-            console.error('No user found with this email');
-          }
-          return result; // Return the result from MongoDB
-        } catch (error) {
-          console.error('Error in deleteUserByEmail:', error);
-          throw new Error('Failed to delete user by email');
-        } finally {
-          await client.close(); // Close the DB connection
-        }
+    async deleteUserByEmail(email: string): Promise<any> {
+      const client = await getClient(); 
+  
+      try {
+        return await client.db(this.db_name).collection(this.collection).deleteOne({ email });
+      } catch (error) {
+        console.error('Error in deleteUserByEmail:', error);
+        throw new Error('Failed to delete user by email');
+      } finally {
+        await client.close();
       }
-}
+    }
+  }
