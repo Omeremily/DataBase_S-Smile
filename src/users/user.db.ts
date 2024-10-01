@@ -5,6 +5,7 @@ let client: MongoClient;
 
 async function getClient(): Promise<MongoClient> {
     if (!client) {
+      console.log('process.env.CONNECTION_STRING', process.env.CONNECTION_STRING);
         client = new MongoClient(process.env.CONNECTION_STRING as string);
         await client.connect();
     }
