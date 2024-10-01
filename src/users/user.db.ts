@@ -60,9 +60,9 @@ export class UserDB {
 
 
     async deleteUserByEmail(email: string): Promise<any> {
-      const client = await getClient(); 
-  
+      const client = await getClient();  
       try {
+        console.log('email', email);
         return await client.db(this.db_name).collection(this.collection).deleteOne({ email });
       } catch (error) {
         console.error('Error in deleteUserByEmail:', error);
