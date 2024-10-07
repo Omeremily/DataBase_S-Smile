@@ -53,6 +53,26 @@ export async function deleteByEmail(email: string): Promise<any> {
   }
   
 
+  export async function getUsersWeights(): Promise<{ weights: { name: string; weight: number }[], avgWeight: number }> {
+    try {
+      const userDB = new UserDB();
+      const users = await userDB.getUserWeights(); // Fetch user weights from the DB
+      const weights = users.map((user: { currentWeight: any; firstName: any; lastName: any; }) => ({
+        weight: user.currentWeight,
+        name: `${user.firstName} ${user.lastName}`
+      }));
+  
+      // Calculate the average weight
+      const totalWeight = weights.reduce((sum: any, user: { weight: any; }) => sum + (user.weight || 0), 0);
+      const avgWeight = users.length > 0 ? totalWeight / users.length : 0;
+  
+      return { weights, avgWeight }; // Return both weights and the average
+    } catch (error) {
+      console.error('Error in getUsersWeights module:', error);
+      throw new Error('Failed to get user weights');
+    }
+  }
+
 export async function findUsersById(id: string): Promise<User> {
     try {
         let query = { _id: new ObjectId(id) };

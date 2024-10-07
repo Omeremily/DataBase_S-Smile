@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser } from './user.model';
+import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
@@ -136,13 +136,15 @@ export async function countUsers(req: Request, res: Response) {
   }
 }
 
-
-
-
-
-
-
-
+export async function getUsersWeight(req: Request, res: Response): Promise<void> {
+  try {
+    const { weights, avgWeight } = await getUsersWeights(); // Call the module function
+    res.status(200).json({ weights, avgWeight }); // Send weights and average to the client
+  } catch (error) {
+    console.error('Error in getUsersWeight controller:', error);
+    res.status(500).json({ error: 'Failed to fetch user weights' });
+  }
+}
 
 
 
