@@ -88,3 +88,14 @@ export async function registerUser(user: User): Promise<any> {
         throw new Error("Registration failed");
     }
 }
+
+export async function getUsersCount(): Promise<number> {
+    try {
+      let count: number = await new UserDB().countAll();
+      return count;
+    } catch (error) {
+      console.error('Error counting users', error);
+      throw new Error("Failed to count users");
+    }
+  }
+  

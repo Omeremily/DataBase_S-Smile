@@ -72,4 +72,17 @@ export class UserDB {
         await client.close();
       }
     }
+
+
+
+    async countAll(): Promise<number> {
+      const client = await getClient();
+      try {
+        return await client.db(this.db_name).collection(this.collection).countDocuments();
+      } catch (error) {
+        console.error('Error counting users', error);
+        throw new Error("Failed to count users");
+      }
+    }
+    
   }

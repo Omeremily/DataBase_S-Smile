@@ -15,7 +15,8 @@ import {
     createDailyMenu, 
     getDailyMenu, 
     deleteDailyMenu, 
-    editDailyMenu 
+    editDailyMenu,
+    countUsers 
 } 
 from './user.controller';
 
@@ -32,6 +33,8 @@ userRouter.get('/', getUsers);
 userRouter.get('/name/:userName', getUsersName);
 userRouter.get('/id/:id', getUserById);
 userRouter.post('/add', addUser);
+userRouter.get('/countUsers', countUsers); 
+
 
 // methods - after logging in
 userRouter.post('/addUserPhoto', addPhotoToGallery);

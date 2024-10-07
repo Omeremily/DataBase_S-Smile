@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail, findUsersById, getAllUsers, getUsersByName, loginUser, registerUser } from './user.model';
+import { User, add, deleteByEmail, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
@@ -126,6 +126,24 @@ export async function deleteUser(req: Request, res: Response) {
     res.status(500).json({ error: 'Failed to delete user' });
   }
 }
+
+export async function countUsers(req: Request, res: Response) {
+  try {
+    let count: number = await getUsersCount();
+    res.status(200).json({ userCount: count });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to count users' });
+  }
+}
+
+
+
+
+
+
+
+
+
 
 
 // User actions after login
