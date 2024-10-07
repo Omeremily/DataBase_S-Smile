@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
+exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -48,6 +48,25 @@ async function deleteByEmail(email) {
     }
 }
 exports.deleteByEmail = deleteByEmail;
+async function getUsersWeights() {
+    try {
+        const userDB = new user_db_1.UserDB();
+        const users = await userDB.getUserWeights(); // Fetch user weights from the DB
+        const weights = users.map((user) => ({
+            weight: user.currentWeight,
+            name: `${user.firstName} ${user.lastName}`
+        }));
+        // Calculate the average weight
+        const totalWeight = weights.reduce((sum, user) => sum + (user.weight || 0), 0);
+        const avgWeight = users.length > 0 ? totalWeight / users.length : 0;
+        return { weights, avgWeight }; // Return both weights and the average
+    }
+    catch (error) {
+        console.error('Error in getUsersWeights module:', error);
+        throw new Error('Failed to get user weights');
+    }
+}
+exports.getUsersWeights = getUsersWeights;
 async function findUsersById(id) {
     try {
         let query = { _id: new mongodb_1.ObjectId(id) };

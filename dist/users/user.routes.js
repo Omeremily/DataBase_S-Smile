@@ -15,6 +15,7 @@ userRouter.get('/name/:userName', user_controller_1.getUsersName);
 userRouter.get('/id/:id', user_controller_1.getUserById);
 userRouter.post('/add', user_controller_1.addUser);
 userRouter.get('/countUsers', user_controller_1.countUsers);
+userRouter.get('/weights', user_controller_1.getUsersWeight);
 // methods - after logging in
 userRouter.post('/addUserPhoto', user_controller_1.addPhotoToGallery);
 userRouter.delete('/users/:userId/photos/:photoId', user_controller_1.deletePhotoFromGallery);

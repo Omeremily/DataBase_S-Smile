@@ -77,6 +77,23 @@ class UserDB {
             throw new Error("Failed to count users");
         }
     }
+    async getUserWeights() {
+        const client = await getClient();
+        try {
+            // Fetching users with their weight, firstName, and lastName
+            return await client.db(this.db_name)
+                .collection(this.collection)
+                .find({}, { projection: { currentWeight: 1, firstName: 1, lastName: 1 } })
+                .toArray();
+        }
+        catch (error) {
+            console.error('Error fetching user weights from DB', error);
+            throw new Error('Failed to fetch user weights');
+        }
+        finally {
+            await client.close();
+        }
+    }
 }
 exports.UserDB = UserDB;
 //# sourceMappingURL=user.db.js.map

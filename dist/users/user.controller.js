@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -135,6 +135,17 @@ async function countUsers(req, res) {
     }
 }
 exports.countUsers = countUsers;
+async function getUsersWeight(req, res) {
+    try {
+        const { weights, avgWeight } = await (0, user_model_1.getUsersWeights)(); // Call the module function
+        res.status(200).json({ weights, avgWeight }); // Send weights and average to the client
+    }
+    catch (error) {
+        console.error('Error in getUsersWeight controller:', error);
+        res.status(500).json({ error: 'Failed to fetch user weights' });
+    }
+}
+exports.getUsersWeight = getUsersWeight;
 // User actions after login
 function addPhotoToGallery(req, res) {
     try {
