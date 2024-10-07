@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -125,6 +125,16 @@ async function deleteUser(req, res) {
     }
 }
 exports.deleteUser = deleteUser;
+async function countUsers(req, res) {
+    try {
+        let count = await (0, user_model_1.getUsersCount)();
+        res.status(200).json({ userCount: count });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to count users' });
+    }
+}
+exports.countUsers = countUsers;
 // User actions after login
 function addPhotoToGallery(req, res) {
     try {

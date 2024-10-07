@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = exports.loginUser = exports.findUsersById = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
+exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -90,4 +90,15 @@ async function registerUser(user) {
     }
 }
 exports.registerUser = registerUser;
+async function getUsersCount() {
+    try {
+        let count = await new user_db_1.UserDB().countAll();
+        return count;
+    }
+    catch (error) {
+        console.error('Error counting users', error);
+        throw new Error("Failed to count users");
+    }
+}
+exports.getUsersCount = getUsersCount;
 //# sourceMappingURL=user.model.js.map
