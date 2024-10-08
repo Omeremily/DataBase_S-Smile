@@ -63,7 +63,7 @@ export async function addUser(req: Request, res: Response) {
 export async function Login(req: Request, res: Response) {
   let { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ error: 'Invalid email or password' });
+    return res.status(400).json({ error: 'Invalid email or password.' });
   }
 
   try {
