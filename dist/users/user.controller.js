@@ -49,7 +49,7 @@ async function addUser(req, res) {
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ error: 'Missing information' });
         }
-        let user = { firstName, lastName, email, password: (0, utils_1.encryptPassword)(password), birthDate, isAdmin, currentWeight };
+        let user = { firstName, lastName, email, password: (0, utils_1.encryptPassword)(password), isAdmin, currentWeight };
         let result = await (0, user_model_1.add)(user);
         if (!result.insertedId) {
             return res.status(400).json({ error: 'User creation failed' });
@@ -65,7 +65,7 @@ exports.addUser = addUser;
 async function Login(req, res) {
     let { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ error: 'Invalid email or password' });
+        return res.status(400).json({ error: 'Invalid email or password.' });
     }
     try {
         let user = await (0, user_model_1.loginUser)(email);
@@ -80,21 +80,42 @@ async function Login(req, res) {
 }
 exports.Login = Login;
 async function register(req, res) {
-    let { email, password, firstName, lastName, birthDate, isAdmin, currentWeight } = req.body;
+    const { email, password, firstName, lastName, isAdmin, currentWeight, goalWeight, phoneNumber, gender, height, targetDate, activityLevel, } = req.body;
+    // Check for required fields
     if (!email || !password || !firstName || !lastName) {
-        return res.status(400).json({ error: 'Missing information' });
+        return res.status(400).json({ error: 'Missing required information' });
     }
     try {
-        let user = { email, password: (0, utils_1.encryptPassword)(password), firstName, lastName, birthDate, isAdmin, currentWeight };
+        // Create user object with all fields
+        let user = {
+            email,
+            password: (0, utils_1.encryptPassword)(password), // Assume encryptPassword is a utility function
+            firstName,
+            lastName,
+            isAdmin,
+            currentWeight,
+            goalWeight,
+            phoneNumber,
+            gender,
+            height,
+            targetDate,
+            activityLevel,
+        };
+        // Call to register user in the database
         let result = await (0, user_model_1.registerUser)(user);
         console.log('result ==> ', result);
+        // Check if registration was successful
         if (!result.insertedId) {
             return res.status(400).json({ error: 'Registration failed' });
         }
+        // Set the _id field on the user object
         user._id = new mongodb_1.ObjectId(result.insertedId);
-        res.status(201).json({ user });
+        // Return the newly registered user (without the password for security)
+        const { password: _, ...userWithoutPassword } = user;
+        res.status(201).json({ user: userWithoutPassword });
     }
     catch (error) {
+        console.error('Registration error: ', error);
         res.status(500).json({ error: 'Registration failed' });
     }
 }

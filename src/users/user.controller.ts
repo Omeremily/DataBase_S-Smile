@@ -162,7 +162,7 @@ export async function deleteUser(req: Request, res: Response) {
 
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete user' });
+    res.status(500).json({ error: 'Failed to delete user.' });
   }
 }
 
