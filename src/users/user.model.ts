@@ -97,7 +97,7 @@ export async function loginUser(email: string): Promise<User> {
         if (users.length === 0) throw new Error("User not found");
         return users[0];
     } catch (error) {
-        console.error('Failed to login user', error);
+        console.error('Failed to login user.', error);
         throw new Error("User not found");
     }
 }
