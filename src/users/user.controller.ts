@@ -46,7 +46,7 @@ export async function addUser(req: Request, res: Response) {
       return res.status(400).json({ error: 'Missing information' });
     }
 
-    let user: User = { firstName, lastName, email, password: encryptPassword(password), birthDate, isAdmin, currentWeight };
+    let user: User = { firstName, lastName, email, password: encryptPassword(password), isAdmin, currentWeight };
     let result = await add(user);
 
     if (!result.insertedId) {
@@ -78,26 +78,65 @@ export async function Login(req: Request, res: Response) {
 }
 
 export async function register(req: Request, res: Response) {
-  let { email, password, firstName, lastName, birthDate, isAdmin, currentWeight } = req.body;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    isAdmin,
+    currentWeight,
+    goalWeight,
+    phoneNumber,
+    gender,
+    height,
+    targetDate,
+    activityLevel,
+  } = req.body;
+
+  // Check for required fields
   if (!email || !password || !firstName || !lastName) {
-    return res.status(400).json({ error: 'Missing information' });
+    return res.status(400).json({ error: 'Missing required information' });
   }
 
   try {
-    let user: User = { email, password: encryptPassword(password), firstName, lastName, birthDate, isAdmin, currentWeight };
+    // Create user object with all fields
+    let user: User = {
+      email,
+      password: encryptPassword(password), // Assume encryptPassword is a utility function
+      firstName,
+      lastName,
+      isAdmin,
+      currentWeight,
+      goalWeight,
+      phoneNumber,
+      gender,
+      height,
+      targetDate,
+      activityLevel,
+    };
+
+    // Call to register user in the database
     let result = await registerUser(user);
     console.log('result ==> ', result);
+
+    // Check if registration was successful
     if (!result.insertedId) {
       return res.status(400).json({ error: 'Registration failed' });
     }
+
+    // Set the _id field on the user object
     user._id = new ObjectId(result.insertedId);
-    res.status(201).json({ user });
+    
+    // Return the newly registered user (without the password for security)
+    const { password: _, ...userWithoutPassword } = user;
+    res.status(201).json({ user: userWithoutPassword });
+
   } catch (error) {
+    console.error('Registration error: ', error);
     res.status(500).json({ error: 'Registration failed' });
   }
-
-  
 }
+
 
 export function editUser(req: Request, res: Response) {
   try {
