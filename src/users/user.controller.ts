@@ -149,7 +149,7 @@ export function editUser(req: Request, res: Response) {
 
 export async function deleteUser(req: Request, res: Response) {
   try {
-    const { email } = req.body; // The email is passed in the body
+    const { email } = req.body; 
     if (!email) {
       return res.status(400).json({ error: 'Email is required' });
     }

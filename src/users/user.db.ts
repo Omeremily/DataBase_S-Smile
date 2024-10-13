@@ -26,9 +26,10 @@ export class UserDB {
             return await client.db(this.db_name).collection(this.collection).find(query, { projection: project }).toArray();
         } catch (error) {
             console.error('Error finding users', error);
-            throw new Error("Users not found");
+            //throw new Error(error.message);
         }
     }
+
 
     async insertUser(user: User): Promise<any> {
         const client = await getClient();
