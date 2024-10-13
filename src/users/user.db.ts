@@ -7,8 +7,8 @@ async function getClient(): Promise<MongoClient> {
     if (!client) {
         console.log('process.env.CONNECTION_STRING', process.env.CONNECTION_STRING);
         client = new MongoClient(process.env.CONNECTION_STRING as string);
-        await client.connect();
     }
+    await client.connect();
     return client;
 }
 
@@ -19,7 +19,7 @@ export class UserDB {
     constructor() {
         this.db_name = process.env.DB_NAME as string;
     }
-
+ 
     async findAll(query = {}, project = {}): Promise<any> {
         const client = await getClient();
         try {
