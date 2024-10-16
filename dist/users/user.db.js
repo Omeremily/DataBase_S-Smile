@@ -7,8 +7,8 @@ async function getClient() {
     if (!client) {
         console.log('process.env.CONNECTION_STRING', process.env.CONNECTION_STRING);
         client = new mongodb_1.MongoClient(process.env.CONNECTION_STRING);
-        await client.connect();
     }
+    await client.connect();
     return client;
 }
 class UserDB {
@@ -23,7 +23,7 @@ class UserDB {
         }
         catch (error) {
             console.error('Error finding users', error);
-            throw new Error("Users not found");
+            //throw new Error(error.message);
         }
     }
     async insertUser(user) {

@@ -131,7 +131,7 @@ function editUser(req, res) {
 exports.editUser = editUser;
 async function deleteUser(req, res) {
     try {
-        const { email } = req.body; // The email is passed in the body
+        const { email } = req.body;
         if (!email) {
             return res.status(400).json({ error: 'Email is required' });
         }
@@ -142,7 +142,7 @@ async function deleteUser(req, res) {
         res.status(200).json({ message: 'User deleted successfully' });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to delete user' });
+        res.status(500).json({ error: 'Failed to delete user.' });
     }
 }
 exports.deleteUser = deleteUser;
