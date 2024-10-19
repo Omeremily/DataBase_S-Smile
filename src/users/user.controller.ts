@@ -84,21 +84,25 @@ export async function register(req: Request, res: Response) {
     firstName,
     lastName,
     isAdmin,
-    currentWeight,
-    goalWeight,
+    startWeight, // Include startWeight here
+    currentWeight, // Extract currentWeight, but make it optional
     phoneNumber,
     gender,
     height,
+    goalWeight,
     targetDate,
     activityLevel,
   } = req.body;
 
   // Check for required fields
-  if (!email || !password || !firstName || !lastName) {
+  if (!email || !password || !firstName || !lastName || !startWeight) {
     return res.status(400).json({ error: 'Missing required information' });
   }
 
   try {
+    // If currentWeight is not provided, set it to startWeight
+    const initialCurrentWeight = currentWeight ?? startWeight;
+
     // Create user object with all fields
     let user: User = {
       email,
@@ -106,7 +110,8 @@ export async function register(req: Request, res: Response) {
       firstName,
       lastName,
       isAdmin,
-      currentWeight,
+      startWeight, // Add startWeight to the user object
+      currentWeight: initialCurrentWeight, // Set currentWeight to startWeight initially if not provided
       goalWeight,
       phoneNumber,
       gender,
@@ -136,7 +141,6 @@ export async function register(req: Request, res: Response) {
     res.status(500).json({ error: 'Registration failed' });
   }
 }
-
 
 export function editUser(req: Request, res: Response) {
   try {

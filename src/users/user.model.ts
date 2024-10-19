@@ -10,6 +10,7 @@ export type User = {
     isAdmin?: boolean;
     currentWeight?: number;
     goalWeight?: number;
+    startWeight?: number;
     phoneNumber?: string;
     gender?: string;
     height?: number;
