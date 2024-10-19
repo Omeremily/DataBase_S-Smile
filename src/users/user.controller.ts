@@ -106,7 +106,7 @@ export async function register(req: Request, res: Response) {
     // Create user object with all fields
     let user: User = {
       email,
-      password: encryptPassword(password), // Assume encryptPassword is a utility function
+      password: encryptPassword(password), 
       firstName,
       lastName,
       isAdmin,
