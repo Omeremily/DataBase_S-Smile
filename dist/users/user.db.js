@@ -94,19 +94,17 @@ class UserDB {
             await client.close();
         }
     }
-    async updateWeightByEmail(email, currentWeight) {
+    async updateUserByEmail(email, updates) {
         const client = await getClient();
         try {
-            const result = await client.db(this.db_name).collection(this.collection).findOneAndUpdate({ email }, // Find user by email
-            { $set: { currentWeight } }, // Update the currentWeight field
-            { returnDocument: 'after' } // Return the updated document
-            );
-            // If a user was found and updated, return it
-            return result?.value ? result.value : null;
+            return await client
+                .db(this.db_name)
+                .collection(this.collection)
+                .updateOne({ email }, { $set: updates });
         }
         catch (error) {
-            console.error('Error updating weight by email:', error);
-            throw new Error('Failed to update weight in the database');
+            console.error('Error updating user by email:', error);
+            throw new Error('Failed to update user by email');
         }
         finally {
             await client.close();

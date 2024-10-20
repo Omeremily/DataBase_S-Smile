@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.updateWeight = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -125,9 +125,17 @@ async function register(req, res) {
     }
 }
 exports.register = register;
-function editUser(req, res) {
+async function editUser(req, res) {
     try {
-        res.status(200).json({ msg: "User Updated!" });
+        const { email, updates } = req.body; // Expect `email` to identify the user and `updates` to include fields to be changed.
+        if (!email || !updates) {
+            return res.status(400).json({ error: 'Email and updates are required' });
+        }
+        const result = await (0, user_model_1.updateUser)(email, updates);
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ error: 'User not found or no changes applied' });
+        }
+        res.status(200).json({ message: 'User updated successfully' });
     }
     catch (error) {
         res.status(500).json({ error: 'Failed to update user' });
@@ -172,26 +180,6 @@ async function getUsersWeight(req, res) {
     }
 }
 exports.getUsersWeight = getUsersWeight;
-const updateWeight = async (req, res) => {
-    const { email, currentWeight } = req.body;
-    if (!email || currentWeight === undefined) {
-        return res.status(400).json({ error: 'Missing required fields: email and currentWeight' });
-    }
-    try {
-        const updatedUser = await (0, user_model_1.updateUserWeight)(email, currentWeight);
-        if (updatedUser) {
-            res.status(200).json(updatedUser);
-        }
-        else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    }
-    catch (error) {
-        console.error('Error updating weight:', error);
-        res.status(500).json({ error: 'Failed to update weight' });
-    }
-};
-exports.updateWeight = updateWeight;
 // User actions after login
 function addPhotoToGallery(req, res) {
     try {

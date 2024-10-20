@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserWeight = exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
+exports.updateUser = exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -120,15 +120,14 @@ async function getUsersCount() {
     }
 }
 exports.getUsersCount = getUsersCount;
-const updateUserWeight = async (email, currentWeight) => {
+async function updateUser(email, updates) {
     try {
-        const updatedUser = await new user_db_1.UserDB().updateWeightByEmail(email, currentWeight);
-        return updatedUser;
+        return await new user_db_1.UserDB().updateUserByEmail(email, updates);
     }
     catch (error) {
-        console.error('Error in updateUserWeight model:', error);
-        throw new Error('Failed to update weight in the model');
+        console.error('Failed to update user', error);
+        throw new Error('User update failed');
     }
-};
-exports.updateUserWeight = updateUserWeight;
+}
+exports.updateUser = updateUser;
 //# sourceMappingURL=user.model.js.map
