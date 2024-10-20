@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser  } from './user.model';
+import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser  } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
@@ -141,10 +141,21 @@ export async function register(req: Request, res: Response) {
     res.status(500).json({ error: 'Registration failed' });
   }
 }
-
-export function editUser(req: Request, res: Response) {
+export async function editUser(req: Request, res: Response) {
   try {
-    res.status(200).json({ msg: "User Updated!" });
+    const { email, updates } = req.body; // Expect `email` to identify the user and `updates` to include fields to be changed.
+    
+    if (!email || !updates) {
+      return res.status(400).json({ error: 'Email and updates are required' });
+    }
+
+    const result = await updateUser(email, updates);
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: 'User not found or no changes applied' });
+    }
+
+    res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to update user' });
   }

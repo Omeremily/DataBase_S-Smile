@@ -103,6 +103,21 @@ export class UserDB {
   }
 
   
+  async updateUserByEmail(email: string, updates: Partial<User>): Promise<any> {
+    const client = await getClient();
+    try {
+      return await client
+        .db(this.db_name)
+        .collection(this.collection)
+        .updateOne({ email }, { $set: updates });
+    } catch (error) {
+      console.error('Error updating user by email:', error);
+      throw new Error('Failed to update user by email');
+    } finally {
+      await client.close();
+    }
   }
+
+}
 
   

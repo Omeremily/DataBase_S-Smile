@@ -125,3 +125,12 @@ export async function getUsersCount(): Promise<number> {
       throw new Error("Failed to count users");
     }
   }
+
+export async function updateUser(email: string, updates: Partial<User>): Promise<any> {
+  try {
+    return await new UserDB().updateUserByEmail(email, updates);
+  } catch (error) {
+    console.error('Failed to update user', error);
+    throw new Error('User update failed');
+  }
+}
