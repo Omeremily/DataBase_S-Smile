@@ -125,15 +125,3 @@ export async function getUsersCount(): Promise<number> {
       throw new Error("Failed to count users");
     }
   }
-
-
-  export const updateUserWeight = async (email: string, currentWeight: number): Promise<User | null> => {
-    try {
-        const updatedUser = await new UserDB().updateWeightByEmail(email, currentWeight);
-        return updatedUser;
-    } catch (error) {
-        console.error('Error in updateUserWeight model:', error);
-        throw new Error('Failed to update weight in the model');
-    }
-};
-  

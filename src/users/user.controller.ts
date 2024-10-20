@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUserWeight  } from './user.model';
+import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser  } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
@@ -189,25 +189,6 @@ export async function getUsersWeight(req: Request, res: Response): Promise<void>
   }
 }
 
-export const updateWeight = async (req: Request, res: Response) => {
-  const { email, currentWeight } = req.body;
-
-  if (!email || currentWeight === undefined) {
-      return res.status(400).json({ error: 'Missing required fields: email and currentWeight' });
-  }
-
-  try {
-      const updatedUser = await updateUserWeight(email, currentWeight);
-      if (updatedUser) {
-          res.status(200).json(updatedUser);
-      } else {
-          res.status(404).json({ error: 'User not found' });
-      }
-  } catch (error) {
-      console.error('Error updating weight:', error);
-      res.status(500).json({ error: 'Failed to update weight' });
-  }
-};
 
 
 // User actions after login

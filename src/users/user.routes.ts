@@ -18,7 +18,6 @@ import {
     editDailyMenu,
     countUsers,
     getUsersWeight,
-    updateWeight
      
 } 
 from './user.controller';
@@ -38,7 +37,6 @@ userRouter.get('/id/:id', getUserById);
 userRouter.post('/add', addUser);
 userRouter.get('/countUsers', countUsers); 
 userRouter.get('/weights', getUsersWeight);
-userRouter.put('/updateWeight', updateWeight);
 
 
 
