@@ -18,6 +18,7 @@ import {
     editDailyMenu,
     countUsers,
     getUsersWeight,    
+    getActivityLevelDistribution
 } 
 from './user.controller';
 
@@ -29,6 +30,8 @@ userRouter.post('/login', Login);
 userRouter.post('/register', register);
 userRouter.put('/edit', editUser);
 userRouter.delete('/delete', deleteUser);
+userRouter.get('/activity-levels', getActivityLevelDistribution);
+
 
 userRouter.get('/', getUsers);
 userRouter.get('/name/:userName', getUsersName);

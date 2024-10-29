@@ -134,3 +134,20 @@ export async function updateUser(email: string, updates: Partial<User>): Promise
     throw new Error('User update failed');
   }
 }
+
+export async function fetchActivityLevelDistribution(): Promise<{ [key: string]: number }> {
+  try {
+      const userDB = new UserDB();
+      const activityCounts = await userDB.getActivityLevelCounts();
+      const distribution: { [key: string]: number } = {};
+      
+      activityCounts.forEach((level: { _id: string; count: number }) => {
+          distribution[level._id] = level.count;
+      });
+      
+      return distribution;
+  } catch (error) {
+      console.error('Error in fetchActivityLevelDistribution:', error);
+      throw new Error('Failed to get activity level distribution');
+  }
+}

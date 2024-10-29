@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser  } from './user.model';
+import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser, fetchActivityLevelDistribution,  } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
@@ -197,6 +197,15 @@ export async function getUsersWeight(req: Request, res: Response): Promise<void>
   } catch (error) {
     console.error('Error in getUsersWeight controller:', error);
     res.status(500).json({ error: 'Failed to fetch user weights' });
+  }
+}
+
+export async function getActivityLevelDistribution(req: Request, res: Response): Promise<void> {
+  try {
+    const distribution = await fetchActivityLevelDistribution();
+    res.status(200).json(distribution);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch activity level distribution' });
   }
 }
 

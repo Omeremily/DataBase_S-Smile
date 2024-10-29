@@ -118,6 +118,23 @@ export class UserDB {
     }
   }
 
+
+  async getActivityLevelCounts(): Promise<any> {
+    const client = await getClient();
+    try {
+        return await client.db(this.db_name)
+            .collection(this.collection)
+            .aggregate([
+                { $group: { _id: "$activityLevel", count: { $sum: 1 } } }
+            ])
+            .toArray();
+    } catch (error) {
+        console.error('Error fetching activity level counts from DB', error);
+        throw new Error('Failed to fetch activity level counts');
+    } finally {
+        await client.close();
+    }
+}
 }
 
   
