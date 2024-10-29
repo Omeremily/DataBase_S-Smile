@@ -80,9 +80,8 @@ async function Login(req, res) {
 }
 exports.Login = Login;
 async function register(req, res) {
-    const { email, password, firstName, lastName, isAdmin, startWeight, // Include startWeight here
-    currentWeight, // Extract currentWeight, but make it optional
-    phoneNumber, gender, height, goalWeight, targetDate, activityLevel, } = req.body;
+    const { email, password, firstName, lastName, isAdmin, startWeight, currentWeight, phoneNumber, gender, height, goalWeight, targetDate, activityLevel, profileImageUrl, // Add profileImageUrl as an optional field
+     } = req.body;
     // Check for required fields
     if (!email || !password || !firstName || !lastName || !startWeight) {
         return res.status(400).json({ error: 'Missing required information' });
@@ -90,21 +89,22 @@ async function register(req, res) {
     try {
         // If currentWeight is not provided, set it to startWeight
         const initialCurrentWeight = currentWeight ?? startWeight;
-        // Create user object with all fields
+        // Create user object with all fields, including the optional profileImageUrl
         let user = {
             email,
             password: (0, utils_1.encryptPassword)(password),
             firstName,
             lastName,
             isAdmin,
-            startWeight, // Add startWeight to the user object
-            currentWeight: initialCurrentWeight, // Set currentWeight to startWeight initially if not provided
+            startWeight,
+            currentWeight: initialCurrentWeight,
             goalWeight,
             phoneNumber,
             gender,
             height,
             targetDate,
             activityLevel,
+            profileImageUrl, // Set profileImageUrl if provided
         };
         // Call to register user in the database
         let result = await (0, user_model_1.registerUser)(user);
