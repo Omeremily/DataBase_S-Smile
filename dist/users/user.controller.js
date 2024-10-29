@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -180,6 +180,16 @@ async function getUsersWeight(req, res) {
     }
 }
 exports.getUsersWeight = getUsersWeight;
+async function getActivityLevelDistribution(req, res) {
+    try {
+        const distribution = await (0, user_model_1.fetchActivityLevelDistribution)();
+        res.status(200).json(distribution);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to fetch activity level distribution' });
+    }
+}
+exports.getActivityLevelDistribution = getActivityLevelDistribution;
 // User actions after login
 function addPhotoToGallery(req, res) {
     try {

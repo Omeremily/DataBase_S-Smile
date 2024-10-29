@@ -10,6 +10,7 @@ userRouter.post('/login', user_controller_1.Login);
 userRouter.post('/register', user_controller_1.register);
 userRouter.put('/edit', user_controller_1.editUser);
 userRouter.delete('/delete', user_controller_1.deleteUser);
+userRouter.get('/activity-levels', user_controller_1.getActivityLevelDistribution);
 userRouter.get('/', user_controller_1.getUsers);
 userRouter.get('/name/:userName', user_controller_1.getUsersName);
 userRouter.get('/id/:id', user_controller_1.getUserById);

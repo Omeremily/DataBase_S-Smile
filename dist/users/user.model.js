@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
+exports.fetchActivityLevelDistribution = exports.updateUser = exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -130,4 +130,20 @@ async function updateUser(email, updates) {
     }
 }
 exports.updateUser = updateUser;
+async function fetchActivityLevelDistribution() {
+    try {
+        const userDB = new user_db_1.UserDB();
+        const activityCounts = await userDB.getActivityLevelCounts();
+        const distribution = {};
+        activityCounts.forEach((level) => {
+            distribution[level._id] = level.count;
+        });
+        return distribution;
+    }
+    catch (error) {
+        console.error('Error in fetchActivityLevelDistribution:', error);
+        throw new Error('Failed to get activity level distribution');
+    }
+}
+exports.fetchActivityLevelDistribution = fetchActivityLevelDistribution;
 //# sourceMappingURL=user.model.js.map

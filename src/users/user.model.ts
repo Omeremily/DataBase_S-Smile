@@ -17,6 +17,7 @@ export type User = {
     targetDate?: Date;
     activityLevel?: string;
     gallery?: string[];
+    profileImageUrl?: string;
 }
 
 export async function getAllUsers(): Promise<User[]> {

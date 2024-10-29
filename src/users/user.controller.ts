@@ -84,14 +84,15 @@ export async function register(req: Request, res: Response) {
     firstName,
     lastName,
     isAdmin,
-    startWeight, // Include startWeight here
-    currentWeight, // Extract currentWeight, but make it optional
+    startWeight, 
+    currentWeight,
     phoneNumber,
     gender,
     height,
     goalWeight,
     targetDate,
     activityLevel,
+    profileImageUrl, // Add profileImageUrl as an optional field
   } = req.body;
 
   // Check for required fields
@@ -103,21 +104,22 @@ export async function register(req: Request, res: Response) {
     // If currentWeight is not provided, set it to startWeight
     const initialCurrentWeight = currentWeight ?? startWeight;
 
-    // Create user object with all fields
+    // Create user object with all fields, including the optional profileImageUrl
     let user: User = {
       email,
       password: encryptPassword(password), 
       firstName,
       lastName,
       isAdmin,
-      startWeight, // Add startWeight to the user object
-      currentWeight: initialCurrentWeight, // Set currentWeight to startWeight initially if not provided
+      startWeight,
+      currentWeight: initialCurrentWeight,
       goalWeight,
       phoneNumber,
       gender,
       height,
       targetDate,
       activityLevel,
+      profileImageUrl, // Set profileImageUrl if provided
     };
 
     // Call to register user in the database
@@ -141,6 +143,7 @@ export async function register(req: Request, res: Response) {
     res.status(500).json({ error: 'Registration failed' });
   }
 }
+
 export async function editUser(req: Request, res: Response) {
   try {
     const { email, updates } = req.body; // Expect `email` to identify the user and `updates` to include fields to be changed.
