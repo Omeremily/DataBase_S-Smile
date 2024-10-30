@@ -3,6 +3,7 @@ import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, 
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
+
 // User CRUD Operations with Express
 export async function getUsers(req: Request, res: Response) {
   try {

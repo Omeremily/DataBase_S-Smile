@@ -18,6 +18,15 @@ export type User = {
     activityLevel?: string;
     gallery?: string[];
     profileImageUrl?: string;
+
+    weeklyGoals?: {
+      goalType: 'calories' | 'steps' | 'workouts' | 'hydration' | 'sleep';
+      targetValue: number; // e.g., target steps, calories, etc.
+      progressValue: number; // Track current progress for the week
+      startDate: Date; // To reset weekly
+      endDate: Date; // Goal deadline (end of the week)
+      isCompleted?: boolean; // Track if the user has completed this week's challenge
+  }[];
 }
 
 export async function getAllUsers(): Promise<User[]> {
