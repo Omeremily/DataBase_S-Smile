@@ -1,25 +1,21 @@
-import { MongoClient, ObjectId } from "mongodb";
-import { Product } from "../products/product.model";
-
-let client: MongoClient;
-
-async function getClient(): Promise<MongoClient> {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProductDB = void 0;
+const mongodb_1 = require("mongodb");
+let client;
+async function getClient() {
     if (!client) {
-        client = new MongoClient(process.env.CONNECTION_STRING as string);
+        client = new mongodb_1.MongoClient(process.env.CONNECTION_STRING);
     }
     await client.connect();
     return client;
 }
-
-export class ProductDB {
-    db_name: string;
-    collection = "products";
-
+class ProductDB {
     constructor() {
-        this.db_name = process.env.DB_NAME as string;
+        this.collection = "products"; // Collection name for products
+        this.db_name = process.env.DB_NAME;
     }
-
-    async findAllProducts(): Promise<Product[]> {
+    async findAllProducts() {
         const client = await getClient();
         try {
             const products = await client.db(this.db_name).collection(this.collection).find({}).toArray();
@@ -32,38 +28,38 @@ export class ProductDB {
                 imageURL: product.imageURL,
                 availability: product.availability,
             }));
-        } finally {
+        }
+        finally {
             await client.close();
         }
     }
-
-    async insertProduct(product: Product): Promise<any> {
+    async insertProduct(product) {
         const client = await getClient();
         try {
             return await client.db(this.db_name).collection(this.collection).insertOne(product);
-        } finally {
+        }
+        finally {
             await client.close();
         }
     }
-
-    async updateProductById(id: string, updates: Partial<Product>): Promise<any> {
+    async updateProductById(id, updates) {
         const client = await getClient();
         try {
-            return await client.db(this.db_name).collection(this.collection).updateOne(
-                { _id: new ObjectId(id) },
-                { $set: updates }
-            );
-        } finally {
+            return await client.db(this.db_name).collection(this.collection).updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: updates });
+        }
+        finally {
             await client.close();
         }
     }
-
-    async deleteProductById(id: string): Promise<any> {
+    async deleteProductById(id) {
         const client = await getClient();
         try {
-            return await client.db(this.db_name).collection(this.collection).deleteOne({ _id: new ObjectId(id) });
-        } finally {
+            return await client.db(this.db_name).collection(this.collection).deleteOne({ _id: new mongodb_1.ObjectId(id) });
+        }
+        finally {
             await client.close();
         }
     }
 }
+exports.ProductDB = ProductDB;
+//# sourceMappingURL=product.db.js.map
