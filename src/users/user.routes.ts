@@ -18,7 +18,10 @@ import {
     editDailyMenu,
     countUsers,
     getUsersWeight,    
-    getActivityLevelDistribution
+    getActivityLevelDistribution,
+    addToCart,
+    updateCartItem,
+    removeFromCart
 } 
 from './user.controller';
 
@@ -41,7 +44,11 @@ userRouter.get('/countUsers', countUsers);
 userRouter.get('/weights', getUsersWeight);
 
 
+//STORE
 
+userRouter.post('/users/:userId/cart/add', addToCart);
+userRouter.put('/users/:userId/cart/update', updateCartItem);
+userRouter.delete('/users/:userId/cart/remove', removeFromCart);
 
 
 // methods - after logging in

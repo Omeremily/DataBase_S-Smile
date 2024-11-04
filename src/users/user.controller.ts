@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser, fetchActivityLevelDistribution,  } from './user.model';
+import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser, fetchActivityLevelDistribution, addItemToUserCart, updateCartItemQuantity, removeItemFromUserCart,  } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
 
@@ -269,5 +269,47 @@ export function editDailyMenu(req: Request, res: Response) {
     res.status(200).json({ msg: "Daily menu updated!" });
   } catch (error) {
     res.status(500).json({ error: "Failed to update daily menu" });
+  }
+}
+
+
+
+//////// STORE
+
+export async function addToCart(req: Request, res: Response) {
+  const { userId, productId, quantity, name, price, imageURL } = req.body;
+
+  try {
+      const updatedCart = await addItemToUserCart(userId, { productId, quantity, name, price, imageURL });
+      res.status(200).json({ message: 'Item added to cart', cart: updatedCart });
+  } catch (error) {
+      console.error('Failed to add item to cart:', error);
+      res.status(500).json({ error: 'Failed to add item to cart' });
+  }
+}
+
+// Update item quantity in cart
+export async function updateCartItem(req: Request, res: Response) {
+  const { userId, productId, quantity } = req.body;
+
+  try {
+      const updatedCart = await updateCartItemQuantity(userId, productId, quantity);
+      res.status(200).json({ message: 'Cart item updated', cart: updatedCart });
+  } catch (error) {
+      console.error('Failed to update cart item:', error);
+      res.status(500).json({ error: 'Failed to update cart item' });
+  }
+}
+
+// Remove item from cart
+export async function removeFromCart(req: Request, res: Response) {
+  const { userId, productId } = req.body;
+
+  try {
+      const updatedCart = await removeItemFromUserCart(userId, productId);
+      res.status(200).json({ message: 'Item removed from cart', cart: updatedCart });
+  } catch (error) {
+      console.error('Failed to remove item from cart:', error);
+      res.status(500).json({ error: 'Failed to remove item from cart' });
   }
 }

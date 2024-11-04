@@ -5,9 +5,11 @@ const mongodb_1 = require("mongodb");
 let client;
 async function getClient() {
     if (!client) {
+        console.log("Connecting to MongoDB with connection string:", process.env.CONNECTION_STRING); // Log connection string
         client = new mongodb_1.MongoClient(process.env.CONNECTION_STRING);
     }
     await client.connect();
+    console.log("Connected to database:", process.env.DB_NAME); // Log the intended database
     return client;
 }
 class ProductDB {
@@ -18,16 +20,11 @@ class ProductDB {
     async findAllProducts() {
         const client = await getClient();
         try {
-            const products = await client.db(this.db_name).collection(this.collection).find({}).toArray();
-            return products.map((product) => ({
-                _id: product._id,
-                name: product.name,
-                description: product.description,
-                price: product.price,
-                category: product.category,
-                imageURL: product.imageURL,
-                availability: product.availability,
-            }));
+            // Use the `.find()` query with type assertion to `Product[]`
+            return await client.db(this.db_name)
+                .collection(this.collection)
+                .find({})
+                .toArray(); // Type assertion here
         }
         finally {
             await client.close();
@@ -36,7 +33,7 @@ class ProductDB {
     async insertProduct(product) {
         const client = await getClient();
         try {
-            return await client.db(this.db_name).collection(this.collection).insertOne(product);
+            return await client.db("SweatNSmileDB").collection(this.collection).insertOne(product);
         }
         finally {
             await client.close();
