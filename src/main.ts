@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import userRouter from './users/user.routes';
+import productRouter from './products/product.routes';
 import 'dotenv/config';
 import cors from 'cors';
 
@@ -14,5 +15,7 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
+
 
 app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
