@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchActivityLevelDistribution = exports.updateUser = exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
+exports.removeItemFromUserCart = exports.updateCartItemQuantity = exports.addItemToUserCart = exports.fetchActivityLevelDistribution = exports.updateUser = exports.getUsersCount = exports.registerUser = exports.loginUser = exports.findUsersById = exports.getUsersWeights = exports.deleteByEmail = exports.add = exports.getUsersByName = exports.getAllUsers = void 0;
 const mongodb_1 = require("mongodb");
 const user_db_1 = require("./user.db");
 async function getAllUsers() {
@@ -146,4 +146,20 @@ async function fetchActivityLevelDistribution() {
     }
 }
 exports.fetchActivityLevelDistribution = fetchActivityLevelDistribution;
+//store
+async function addItemToUserCart(userId, product) {
+    const userDB = new user_db_1.UserDB();
+    return await userDB.addToCart(userId, product);
+}
+exports.addItemToUserCart = addItemToUserCart;
+async function updateCartItemQuantity(userId, productId, quantity) {
+    const userDB = new user_db_1.UserDB();
+    return await userDB.updateCartItem(userId, productId, quantity);
+}
+exports.updateCartItemQuantity = updateCartItemQuantity;
+async function removeItemFromUserCart(userId, productId) {
+    const userDB = new user_db_1.UserDB();
+    return await userDB.removeFromCart(userId, productId);
+}
+exports.removeItemFromUserCart = removeItemFromUserCart;
 //# sourceMappingURL=user.model.js.map

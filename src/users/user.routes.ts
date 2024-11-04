@@ -46,9 +46,9 @@ userRouter.get('/weights', getUsersWeight);
 
 //STORE
 
-userRouter.post('/users/:userId/cart/add', addToCart);
-userRouter.put('/users/:userId/cart/update', updateCartItem);
-userRouter.delete('/users/:userId/cart/remove', removeFromCart);
+userRouter.post('/addToCart', addToCart);
+userRouter.put('/updateCart', updateCartItem);
+userRouter.delete('removeFromCart', removeFromCart);
 
 
 // methods - after logging in
