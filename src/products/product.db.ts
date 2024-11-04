@@ -5,9 +5,11 @@ let client: MongoClient;
 
 async function getClient(): Promise<MongoClient> {
     if (!client) {
+        console.log("Connecting to MongoDB with connection string:", process.env.CONNECTION_STRING); // Log connection string
         client = new MongoClient(process.env.CONNECTION_STRING as string);
     }
     await client.connect();
+    console.log("Connected to database:", process.env.DB_NAME); // Log the intended database
     return client;
 }
 

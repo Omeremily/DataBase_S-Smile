@@ -12,7 +12,7 @@ async function getClient() {
 }
 class ProductDB {
     constructor() {
-        this.collection = "products"; // Collection name for products
+        this.collection = "products";
         this.db_name = process.env.DB_NAME;
     }
     async findAllProducts() {
