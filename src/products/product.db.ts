@@ -24,29 +24,25 @@ export class ProductDB {
     async findAllProducts(): Promise<Product[]> {
         const client = await getClient();
         try {
-            const products = await client.db(this.db_name).collection(this.collection).find({}).toArray();
-            return products.map((product) => ({
-                _id: product._id,
-                name: product.name,
-                description: product.description,
-                price: product.price,
-                category: product.category,
-                imageURL: product.imageURL,
-                availability: product.availability,
-            }));
+            // Use the `.find()` query with type assertion to `Product[]`
+            return await client.db(this.db_name)
+                .collection(this.collection)
+                .find({})
+                .toArray() as Product[]; // Type assertion here
         } finally {
             await client.close();
         }
     }
-
+    
     async insertProduct(product: Product): Promise<any> {
         const client = await getClient();
         try {
-            return await client.db(this.db_name).collection(this.collection).insertOne(product);
+            return await client.db("SweatNSmileDB").collection(this.collection).insertOne(product);
         } finally {
             await client.close();
         }
     }
+    
 
     async updateProductById(id: string, updates: Partial<Product>): Promise<any> {
         const client = await getClient();
