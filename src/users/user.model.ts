@@ -18,6 +18,8 @@ export type User = {
     activityLevel?: string;
     gallery?: string[];
     profileImageUrl?: string;
+    cart?: { productId: string; quantity: number }[]; 
+
 
     weeklyGoals?: {
       goalType: 'calories' | 'steps' | 'workouts' | 'hydration' | 'sleep';
@@ -26,14 +28,6 @@ export type User = {
       startDate: Date; // To reset weekly
       endDate: Date; // Goal deadline (end of the week)
       isCompleted?: boolean; // Track if the user has completed this week's challenge
-  }[];
-
-    cart?: {
-      productId: ObjectId; // Reference to the product in the database
-      quantity: number;
-      name: string;
-      price: number;
-      imageURL: string;
   }[];
 }
 
@@ -172,18 +166,3 @@ export async function fetchActivityLevelDistribution(): Promise<{ [key: string]:
 
 
 //store
-
-export async function addItemToUserCart(userId: string, product: { productId: string; quantity: number; name: string; price: number; imageURL: string }) {
-  const userDB = new UserDB();
-  return await userDB.addToCart(userId, product);
-}
-
-export async function updateCartItemQuantity(userId: string, productId: string, quantity: number) {
-  const userDB = new UserDB();
-  return await userDB.updateCartItem(userId, productId, quantity);
-}
-
-export async function removeItemFromUserCart(userId: string, productId: string) {
-  const userDB = new UserDB();
-  return await userDB.removeFromCart(userId, productId);
-}

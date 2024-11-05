@@ -18,9 +18,9 @@ userRouter.post('/add', user_controller_1.addUser);
 userRouter.get('/countUsers', user_controller_1.countUsers);
 userRouter.get('/weights', user_controller_1.getUsersWeight);
 //STORE
-userRouter.post('/users/:userId/cart/add', user_controller_1.addToCart);
-userRouter.put('/users/:userId/cart/update', user_controller_1.updateCartItem);
-userRouter.delete('/users/:userId/cart/remove', user_controller_1.removeFromCart);
+userRouter.post('/addToCart', user_controller_1.addToCart);
+userRouter.put('/updateCart', user_controller_1.updateCartItem);
+userRouter.delete('removeFromCart', user_controller_1.removeFromCart);
 // methods - after logging in
 userRouter.post('/addUserPhoto', user_controller_1.addPhotoToGallery);
 userRouter.delete('/users/:userId/photos/:photoId', user_controller_1.deletePhotoFromGallery);

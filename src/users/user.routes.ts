@@ -9,19 +9,11 @@ import {
     register, 
     editUser, 
     deleteUser, 
-    addPhotoToGallery, 
-    deletePhotoFromGallery, 
-    purchaseInStore, 
-    createDailyMenu, 
-    getDailyMenu, 
-    deleteDailyMenu, 
-    editDailyMenu,
     countUsers,
     getUsersWeight,    
     getActivityLevelDistribution,
     addToCart,
-    updateCartItem,
-    removeFromCart
+    getUserCart,
 } 
 from './user.controller';
 
@@ -45,20 +37,9 @@ userRouter.get('/weights', getUsersWeight);
 
 
 //STORE
+userRouter.post('/cart', addToCart); 
+userRouter.get('/:userId/cart', getUserCart);
 
-userRouter.post('/addToCart', addToCart);
-userRouter.put('/updateCart', updateCartItem);
-userRouter.delete('removeFromCart', removeFromCart);
-
-
-// methods - after logging in
-userRouter.post('/addUserPhoto', addPhotoToGallery);
-userRouter.delete('/users/:userId/photos/:photoId', deletePhotoFromGallery);
-userRouter.post('/users/:userId/purchase', purchaseInStore);
-userRouter.post('/users/:userId/dailyMenu', createDailyMenu);
-userRouter.get('/users/:userId/dailyMenu', getDailyMenu);
-userRouter.delete('/users/:userId/dailyMenu', deleteDailyMenu);
-userRouter.put('/users/:userId/dailyMenu', editDailyMenu);
 
 // export 
 export default userRouter;
