@@ -257,9 +257,7 @@ exports.editDailyMenu = editDailyMenu;
 //////// STORE
 async function addToCart(req, res) {
     const { userId, productId, quantity } = req.body;
-    if (!userId || !productId || quantity == null) {
-        return res.status(400).json({ error: 'userId, productId, and quantity are required' });
-    }
+    console.log("Received data:", { userId, productId, quantity }); // Log incoming data
     try {
         const user = await (0, user_model_1.findUsersById)(userId);
         if (!user)
@@ -276,7 +274,7 @@ async function addToCart(req, res) {
         res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
     }
     catch (error) {
-        console.error("Error in addToCart:", error);
+        console.error("Error in addToCart:", error); // Log error for troubleshooting
         res.status(500).json({ error: 'Failed to update cart' });
     }
 }
