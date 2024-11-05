@@ -257,11 +257,14 @@ exports.editDailyMenu = editDailyMenu;
 //////// STORE
 async function addToCart(req, res) {
     const { userId, productId, quantity } = req.body;
-    console.log("Received data:", { userId, productId, quantity }); // Log incoming data
+    if (!userId || !productId || quantity == null) {
+        return res.status(400).json({ error: 'userId, productId, and quantity are required' });
+    }
     try {
         const user = await (0, user_model_1.findUsersById)(userId);
-        if (!user)
+        if (!user) {
             return res.status(404).json({ error: 'User not found' });
+        }
         const updatedCart = user.cart || [];
         const itemIndex = updatedCart.findIndex(item => item.productId === productId);
         if (itemIndex > -1) {
@@ -270,11 +273,16 @@ async function addToCart(req, res) {
         else {
             updatedCart.push({ productId, quantity });
         }
-        await (0, user_model_1.updateUser)(user.email, { cart: updatedCart });
-        res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
+        const result = await (0, user_model_1.updateUser)(userId, { cart: updatedCart });
+        if (result) {
+            res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
+        }
+        else {
+            throw new Error('Database update failed');
+        }
     }
     catch (error) {
-        console.error("Error in addToCart:", error); // Log error for troubleshooting
+        console.error("Error in addToCart:", error);
         res.status(500).json({ error: 'Failed to update cart' });
     }
 }

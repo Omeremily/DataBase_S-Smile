@@ -277,38 +277,35 @@ export function editDailyMenu(req: Request, res: Response) {
 //////// STORE
 
 export async function addToCart(req: Request, res: Response) {
-  const { userId, productId, quantity } = req.body;
+  console.log("Request body received:", req.body);  // Log incoming request body
 
-  if (!userId || !productId || quantity == null) {
-    return res.status(400).json({ error: 'userId, productId, and quantity are required' });
+  const { userId, cart } = req.body;
+
+  // Check if required fields are missing and log accordingly
+  if (!userId || !cart || !Array.isArray(cart) || cart.some(item => !item.productId || item.quantity == null)) {
+      console.error("Validation failed - Missing userId, productId, or quantity.");
+      return res.status(400).json({ error: 'userId, productId, and quantity are required' });
   }
 
   try {
-    const user = await findUsersById(userId);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+      const user = await findUsersById(userId);
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
 
-    const updatedCart = user.cart || [];
-    const itemIndex = updatedCart.findIndex(item => item.productId === productId);
+      const updatedCart = cart.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+      }));
 
-    if (itemIndex > -1) {
-      updatedCart[itemIndex].quantity += quantity;
-    } else {
-      updatedCart.push({ productId, quantity });
-    }
-
-    const result = await updateUser(userId, { cart: updatedCart });
-    if (result) {
+      await updateUser(userId, { cart: updatedCart });
       res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
-    } else {
-      throw new Error('Database update failed');
-    }
   } catch (error) {
-    console.error("Error in addToCart:", error);
-    res.status(500).json({ error: 'Failed to update cart' });
+      console.error("Error in addToCart:", error);
+      res.status(500).json({ error: 'Failed to update cart' });
   }
 }
+
 
 
 
