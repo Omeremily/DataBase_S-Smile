@@ -278,6 +278,7 @@ export function editDailyMenu(req: Request, res: Response) {
 
 export async function addToCart(req: Request, res: Response) {
   const { userId, productId, quantity } = req.body;
+  console.log("Received data:", { userId, productId, quantity }); // Log incoming data
 
   try {
     const user = await findUsersById(userId);
@@ -295,9 +296,11 @@ export async function addToCart(req: Request, res: Response) {
     await updateUser(user.email, { cart: updatedCart });
     res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
   } catch (error) {
+    console.error("Error in addToCart:", error); // Log error for troubleshooting
     res.status(500).json({ error: 'Failed to update cart' });
   }
 }
+
 
 export async function getUserCart(req: Request, res: Response) {
   const { userId } = req.params;
