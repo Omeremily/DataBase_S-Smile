@@ -18,17 +18,8 @@ userRouter.post('/add', user_controller_1.addUser);
 userRouter.get('/countUsers', user_controller_1.countUsers);
 userRouter.get('/weights', user_controller_1.getUsersWeight);
 //STORE
-userRouter.post('/addToCart', user_controller_1.addToCart);
-userRouter.put('/updateCart', user_controller_1.updateCartItem);
-userRouter.delete('removeFromCart', user_controller_1.removeFromCart);
-// methods - after logging in
-userRouter.post('/addUserPhoto', user_controller_1.addPhotoToGallery);
-userRouter.delete('/users/:userId/photos/:photoId', user_controller_1.deletePhotoFromGallery);
-userRouter.post('/users/:userId/purchase', user_controller_1.purchaseInStore);
-userRouter.post('/users/:userId/dailyMenu', user_controller_1.createDailyMenu);
-userRouter.get('/users/:userId/dailyMenu', user_controller_1.getDailyMenu);
-userRouter.delete('/users/:userId/dailyMenu', user_controller_1.deleteDailyMenu);
-userRouter.put('/users/:userId/dailyMenu', user_controller_1.editDailyMenu);
+userRouter.post('/cart', user_controller_1.addToCart);
+userRouter.get('/:userId/cart', user_controller_1.getUserCart);
 // export 
 exports.default = userRouter;
 //# sourceMappingURL=user.routes.js.map

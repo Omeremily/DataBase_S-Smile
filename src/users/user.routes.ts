@@ -34,9 +34,6 @@ userRouter.get('/id/:id', getUserById);
 userRouter.post('/add', addUser);
 userRouter.get('/countUsers', countUsers); 
 userRouter.get('/weights', getUsersWeight);
-
-
-//STORE
 userRouter.post('/cart', addToCart); 
 userRouter.get('/:userId/cart', getUserCart);
 

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeFromCart = exports.updateCartItem = exports.addToCart = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.getUserCart = exports.addToCart = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -256,41 +256,38 @@ function editDailyMenu(req, res) {
 exports.editDailyMenu = editDailyMenu;
 //////// STORE
 async function addToCart(req, res) {
-    const { userId, productId, quantity, name, price, imageURL } = req.body;
+    const { userId, productId, quantity } = req.body;
     try {
-        const updatedCart = await (0, user_model_1.addItemToUserCart)(userId, { productId, quantity, name, price, imageURL });
-        res.status(200).json({ message: 'Item added to cart', cart: updatedCart });
+        const user = await (0, user_model_1.findUsersById)(userId);
+        if (!user)
+            return res.status(404).json({ error: 'User not found' });
+        const updatedCart = user.cart || [];
+        const itemIndex = updatedCart.findIndex(item => item.productId === productId);
+        if (itemIndex > -1) {
+            updatedCart[itemIndex].quantity += quantity;
+        }
+        else {
+            updatedCart.push({ productId, quantity });
+        }
+        await (0, user_model_1.updateUser)(user.email, { cart: updatedCart });
+        res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
     }
     catch (error) {
-        console.error('Failed to add item to cart:', error);
-        res.status(500).json({ error: 'Failed to add item to cart' });
+        res.status(500).json({ error: 'Failed to update cart' });
     }
 }
 exports.addToCart = addToCart;
-// Update item quantity in cart
-async function updateCartItem(req, res) {
-    const { userId, productId, quantity } = req.body;
+async function getUserCart(req, res) {
+    const { userId } = req.params;
     try {
-        const updatedCart = await (0, user_model_1.updateCartItemQuantity)(userId, productId, quantity);
-        res.status(200).json({ message: 'Cart item updated', cart: updatedCart });
+        const user = await (0, user_model_1.findUsersById)(userId);
+        if (!user)
+            return res.status(404).json({ error: 'User not found' });
+        res.status(200).json({ cart: user.cart || [] });
     }
     catch (error) {
-        console.error('Failed to update cart item:', error);
-        res.status(500).json({ error: 'Failed to update cart item' });
+        res.status(500).json({ error: 'Failed to retrieve cart' });
     }
 }
-exports.updateCartItem = updateCartItem;
-// Remove item from cart
-async function removeFromCart(req, res) {
-    const { userId, productId } = req.body;
-    try {
-        const updatedCart = await (0, user_model_1.removeItemFromUserCart)(userId, productId);
-        res.status(200).json({ message: 'Item removed from cart', cart: updatedCart });
-    }
-    catch (error) {
-        console.error('Failed to remove item from cart:', error);
-        res.status(500).json({ error: 'Failed to remove item from cart' });
-    }
-}
-exports.removeFromCart = removeFromCart;
+exports.getUserCart = getUserCart;
 //# sourceMappingURL=user.controller.js.map
