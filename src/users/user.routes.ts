@@ -12,8 +12,6 @@ import {
     countUsers,
     getUsersWeight,    
     getActivityLevelDistribution,
-    addToCart,
-    getUserCart,
 } 
 from './user.controller';
 
@@ -34,8 +32,7 @@ userRouter.get('/id/:id', getUserById);
 userRouter.post('/add', addUser);
 userRouter.get('/countUsers', countUsers); 
 userRouter.get('/weights', getUsersWeight);
-userRouter.post('/cart', addToCart); 
-userRouter.get('/:userId/cart', getUserCart);
+
 
 
 // export 

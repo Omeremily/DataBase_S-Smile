@@ -256,8 +256,11 @@ function editDailyMenu(req, res) {
 exports.editDailyMenu = editDailyMenu;
 //////// STORE
 async function addToCart(req, res) {
-    const { userId, productId, quantity } = req.body;
-    if (!userId || !productId || quantity == null) {
+    console.log("Request body received:", req.body); // Log incoming request body
+    const { userId, cart } = req.body;
+    // Check if required fields are missing and log accordingly
+    if (!userId || !cart || !Array.isArray(cart) || cart.some(item => !item.productId || item.quantity == null)) {
+        console.error("Validation failed - Missing userId, productId, or quantity.");
         return res.status(400).json({ error: 'userId, productId, and quantity are required' });
     }
     try {
@@ -265,21 +268,12 @@ async function addToCart(req, res) {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        const updatedCart = user.cart || [];
-        const itemIndex = updatedCart.findIndex(item => item.productId === productId);
-        if (itemIndex > -1) {
-            updatedCart[itemIndex].quantity += quantity;
-        }
-        else {
-            updatedCart.push({ productId, quantity });
-        }
-        const result = await (0, user_model_1.updateUser)(userId, { cart: updatedCart });
-        if (result) {
-            res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
-        }
-        else {
-            throw new Error('Database update failed');
-        }
+        const updatedCart = cart.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity,
+        }));
+        await (0, user_model_1.updateUser)(userId, { cart: updatedCart });
+        res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
     }
     catch (error) {
         console.error("Error in addToCart:", error);

@@ -18,8 +18,6 @@ export type User = {
     activityLevel?: string;
     gallery?: string[];
     profileImageUrl?: string;
-    cart?: { productId: string; quantity: number }[]; 
-
 
     weeklyGoals?: {
       goalType: 'calories' | 'steps' | 'workouts' | 'hydration' | 'sleep';
@@ -28,6 +26,11 @@ export type User = {
       startDate: Date; // To reset weekly
       endDate: Date; // Goal deadline (end of the week)
       isCompleted?: boolean; // Track if the user has completed this week's challenge
+  }[];
+
+    cart?: {
+      productId: string;
+      quantity: number;
   }[];
 }
 
