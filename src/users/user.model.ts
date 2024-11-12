@@ -32,7 +32,30 @@ export type User = {
       productId: string;
       quantity: number;
   }[];
+
+  menus?: {
+    menuId: string;
+    date: Date;
+    meals: {
+        Breakfast?: { [category: string]: FoodItem };
+        Lunch?: { [category: string]: FoodItem };
+        Dinner?: { [category: string]: FoodItem };
+        Extras?: { [category: string]: FoodItem };
+    };
+    totalMacros: { protein: number; carbs: number; fat: number; calories: number };
+}[];
+
 }
+
+export type FoodItem = {
+  id: string;
+  name: string;
+  calories: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+  quantity: number; // Adjust based on your data structure
+};
 
 export async function getAllUsers(): Promise<User[]> {
     try {

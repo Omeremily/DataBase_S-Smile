@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser, fetchActivityLevelDistribution,} from './user.model';
+import { User, add, deleteByEmail ,getUsersWeights, findUsersById, getAllUsers, getUsersByName, getUsersCount, loginUser, registerUser, updateUser, fetchActivityLevelDistribution } from './user.model';
 import { ObjectId } from 'mongodb';
 import { decryptPassword, encryptPassword } from '../utils/utils';
+import { UserDB } from './user.db';  
 
 
 // User CRUD Operations with Express
@@ -273,3 +274,23 @@ export function editDailyMenu(req: Request, res: Response) {
 }
 
 
+export async function saveMenu(req: Request, res: Response) {
+  try {
+      const { userId, meals, totalMacros } = req.body;
+
+      const menu = {
+          menuId: new ObjectId().toString(),
+          date: new Date(),
+          meals,
+          totalMacros,
+      };
+
+      const userDB = new UserDB();
+      await userDB.addMenuToUser(userId, menu);
+
+      res.status(200).json({ message: "Menu saved successfully", menu });
+  } catch (error) {
+      console.error('Failed to save menu', error);
+      res.status(500).json({ error: "Error saving menu" });
+  }
+}
