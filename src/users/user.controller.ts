@@ -273,13 +273,29 @@ export function editDailyMenu(req: Request, res: Response) {
   }
 }
 
+export async function getUserByEmail(req: Request, res: Response) {
+  try {
+      const { email } = req.params;
+      const userDB = new UserDB();
+      const user = await userDB.findUserByEmail(email);
+
+      if (!user) {
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      res.status(200).json(user);
+  } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve user' });
+  }
+}
+
 
 export const saveMenu = async (req: Request, res: Response) => {
   try {
-      const { userId, meals, totalMacros } = req.body;
+      const { email, meals, totalMacros } = req.body;
 
-      if (!userId || !meals || !totalMacros) {
-          console.error('Missing required fields in request body:', { userId, meals, totalMacros });
+      if (!email || !meals || !totalMacros) {
+          console.error('Missing required fields in request body:', { email, meals, totalMacros });
           return res.status(400).json({ message: "Missing data in request body" });
       }
 
@@ -291,17 +307,17 @@ export const saveMenu = async (req: Request, res: Response) => {
       };
 
       const userDB = new UserDB();
-      await userDB.addMenuToUser(userId, menu);
+      await userDB.addMenuToUserByEmail(email, menu);
 
       res.status(200).json({ message: "Menu saved successfully", menu });
   } catch (error) {
-      if (error instanceof Error) { // Type guard to check if error is of type Error
+      if (error instanceof Error) {
           console.error('Error saving menu:', error.message);
           res.status(500).json({ error: "Error saving menu", details: error.message });
       } else {
-          // Handle cases where error is not an instance of Error
-          console.error('Unexpected error saving menu');
           res.status(500).json({ error: "Error saving menu", details: "Unexpected error" });
       }
   }
+
+  
 };

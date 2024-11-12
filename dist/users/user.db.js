@@ -132,32 +132,21 @@ class UserDB {
         const client = await getClient();
         try {
             const query = { _id: new mongodb_1.ObjectId(userId) };
-            // Test if the user can be found without attempting to update
-            const user = await client.db(this.db_name).collection(this.collection).findOne(query);
-            if (!user) {
-                console.error(`User not found with userId: ${userId}`);
-                throw new Error("User not found");
-            }
-            else {
-                console.log(`User found: ${userId}`);
-                // Optionally log the user to confirm
-                console.log(user);
-            }
-            // Comment out the update code for now to isolate the retrieval step
-            /*
             const update = { $push: { menus: menu } };
             const result = await client.db(this.db_name).collection(this.collection).updateOne(query, update);
-      
             if (result.matchedCount === 0) {
-                throw new Error("User not found");
-            } else {
+                throw new Error(`User not found for ID: ${userId}`);
+            }
+            else if (result.modifiedCount === 0) {
+                throw new Error(`No changes made to the user's menus field. Check permissions or document structure.`);
+            }
+            else {
                 console.log(`Menu added successfully to user with userId: ${userId}`);
             }
-            */
         }
         catch (error) {
-            console.error('Error in addMenuToUser:', error);
-            throw new Error("Error adding menu to user");
+            console.error('Detailed error in addMenuToUser:', error);
+            throw new Error("Error adding menu to user: " + error.message);
         }
         finally {
             await client.close();
