@@ -37,7 +37,7 @@ userRouter.get('/countUsers', countUsers);
 userRouter.get('/weights', getUsersWeight);
 userRouter.post('/saveMenu', saveMenu);
 userRouter.get('/menus/:email', getUserMenus);
-userRouter.get('/getUserByEmail:email', getUserByEmail);
+userRouter.get('/getUserByEmail/:email', getUserByEmail);
 
 
 
