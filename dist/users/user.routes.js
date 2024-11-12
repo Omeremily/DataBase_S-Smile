@@ -19,7 +19,7 @@ userRouter.get('/countUsers', user_controller_1.countUsers);
 userRouter.get('/weights', user_controller_1.getUsersWeight);
 userRouter.post('/saveMenu', user_controller_1.saveMenu);
 userRouter.get('/menus/:email', user_controller_1.getUserMenus);
-userRouter.get('/getUserByEmail:email', user_controller_1.getUserByEmail);
+userRouter.get('/getUserByEmail/:email', user_controller_1.getUserByEmail);
 // export 
 exports.default = userRouter;
 //# sourceMappingURL=user.routes.js.map
