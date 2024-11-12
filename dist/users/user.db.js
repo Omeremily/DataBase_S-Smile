@@ -128,6 +128,21 @@ class UserDB {
             await client.close();
         }
     }
+    async addMenuToUser(userId, menu) {
+        const client = await getClient();
+        try {
+            const query = { _id: new mongodb_1.ObjectId(userId) };
+            const update = { $push: { menus: menu } };
+            const result = await client.db(this.db_name).collection(this.collection).updateOne(query, update);
+            if (result.matchedCount === 0) {
+                throw new Error("User not found");
+            }
+        }
+        catch (error) {
+            console.error('Failed to add menu to user', error);
+            throw new Error("Error adding menu to user");
+        }
+    }
 }
 exports.UserDB = UserDB;
 //# sourceMappingURL=user.db.js.map

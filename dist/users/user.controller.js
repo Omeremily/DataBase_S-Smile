@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserCart = exports.addToCart = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.saveMenu = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
+const user_db_1 = require("./user.db");
 // User CRUD Operations with Express
 async function getUsers(req, res) {
     try {
@@ -254,44 +255,23 @@ function editDailyMenu(req, res) {
     }
 }
 exports.editDailyMenu = editDailyMenu;
-//////// STORE
-async function addToCart(req, res) {
-    console.log("Request body received:", req.body); // Log incoming request body
-    const { userId, cart } = req.body;
-    // Check if required fields are missing and log accordingly
-    if (!userId || !cart || !Array.isArray(cart) || cart.some(item => !item.productId || item.quantity == null)) {
-        console.error("Validation failed - Missing userId, productId, or quantity.");
-        return res.status(400).json({ error: 'userId, productId, and quantity are required' });
-    }
+async function saveMenu(req, res) {
     try {
-        const user = await (0, user_model_1.findUsersById)(userId);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        const updatedCart = cart.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity,
-        }));
-        await (0, user_model_1.updateUser)(userId, { cart: updatedCart });
-        res.status(200).json({ message: 'Cart updated successfully', cart: updatedCart });
+        const { userId, meals, totalMacros } = req.body;
+        const menu = {
+            menuId: new mongodb_1.ObjectId().toString(),
+            date: new Date(),
+            meals,
+            totalMacros,
+        };
+        const userDB = new user_db_1.UserDB();
+        await userDB.addMenuToUser(userId, menu);
+        res.status(200).json({ message: "Menu saved successfully", menu });
     }
     catch (error) {
-        console.error("Error in addToCart:", error);
-        res.status(500).json({ error: 'Failed to update cart' });
+        console.error('Failed to save menu', error);
+        res.status(500).json({ error: "Error saving menu" });
     }
 }
-exports.addToCart = addToCart;
-async function getUserCart(req, res) {
-    const { userId } = req.params;
-    try {
-        const user = await (0, user_model_1.findUsersById)(userId);
-        if (!user)
-            return res.status(404).json({ error: 'User not found' });
-        res.status(200).json({ cart: user.cart || [] });
-    }
-    catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve cart' });
-    }
-}
-exports.getUserCart = getUserCart;
+exports.saveMenu = saveMenu;
 //# sourceMappingURL=user.controller.js.map

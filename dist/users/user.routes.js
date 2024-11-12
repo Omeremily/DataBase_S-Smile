@@ -17,8 +17,7 @@ userRouter.get('/id/:id', user_controller_1.getUserById);
 userRouter.post('/add', user_controller_1.addUser);
 userRouter.get('/countUsers', user_controller_1.countUsers);
 userRouter.get('/weights', user_controller_1.getUsersWeight);
-userRouter.post('/cart', user_controller_1.addToCart);
-userRouter.get('/:userId/cart', user_controller_1.getUserCart);
+userRouter.post('/saveMenu', user_controller_1.saveMenu);
 // export 
 exports.default = userRouter;
 //# sourceMappingURL=user.routes.js.map
