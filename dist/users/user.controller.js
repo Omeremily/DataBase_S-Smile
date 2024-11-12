@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveMenu = exports.getUserByEmail = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.saveMenu = exports.getUserMenus = exports.getUserByEmail = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -270,6 +270,22 @@ async function getUserByEmail(req, res) {
     }
 }
 exports.getUserByEmail = getUserByEmail;
+async function getUserMenus(req, res) {
+    try {
+        const { email } = req.params;
+        const userDB = new user_db_1.UserDB();
+        const user = await userDB.findUserByEmail(email);
+        if (!user || !user.menus) {
+            return res.status(404).json({ error: "No menus found for this user" });
+        }
+        res.status(200).json(user.menus);
+    }
+    catch (error) {
+        console.error('Error fetching menus:', error);
+        res.status(500).json({ error: "Error retrieving menus" });
+    }
+}
+exports.getUserMenus = getUserMenus;
 const saveMenu = async (req, res) => {
     try {
         const { email, meals, totalMacros } = req.body;
