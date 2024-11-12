@@ -214,65 +214,6 @@ export async function getActivityLevelDistribution(req: Request, res: Response):
   }
 }
 
-
-
-// User actions after login
-export function addPhotoToGallery(req: Request, res: Response) {
-  try {
-    res.status(200).json({ msg: "Photo added to gallery!" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to add photo to gallery" });
-  }
-}
-
-export function deletePhotoFromGallery(req: Request, res: Response) {
-  try {
-    res.status(200).json({ msg: "Photo deleted from gallery!" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to delete photo from gallery" });
-  }
-}
-
-export function purchaseInStore(req: Request, res: Response) {
-  try {
-    res.status(200).json({ msg: "Purchase successful!" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to complete purchase" });
-  }
-}
-
-export function createDailyMenu(req: Request, res: Response) {
-  try {
-    res.status(200).json({ msg: "Daily menu created!" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create daily menu" });
-  }
-}
-
-export function getDailyMenu(req: Request, res: Response) {
-  try {
-    res.status(200).json("dailyMenu");
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch daily menu" });
-  }
-}
-
-export function deleteDailyMenu(req: Request, res: Response) {
-  try {
-    res.status(200).json({ msg: "Daily menu deleted!" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to delete daily menu" });
-  }
-}
-
-export function editDailyMenu(req: Request, res: Response) {
-  try {
-    res.status(200).json({ msg: "Daily menu updated!" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update daily menu" });
-  }
-}
-
 export async function getUserByEmail(req: Request, res: Response) {
   try {
       const { email } = req.params;
@@ -335,3 +276,47 @@ export const saveMenu = async (req: Request, res: Response) => {
       }
   }
 };
+
+
+//store
+
+export async function getUserCart(req: Request, res: Response) {
+  const { email } = req.params;
+  try {
+      const user = await new UserDB().findUserByEmail(email);
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+      res.status(200).json({ cart: user.cart || [] });
+  } catch (error) {
+      console.error('Error fetching user cart:', error);
+      res.status(500).json({ error: 'Failed to fetch cart' });
+  }
+}
+
+export async function addOrUpdateCartItem(req: Request, res: Response) {
+  const { email } = req.params;
+  const { productId, name, price, quantity, imageURL } = req.body;
+
+  try {
+      const userDB = new UserDB();
+      await userDB.addOrUpdateCartItemByEmail(email, { productId, name, price, quantity, imageURL });
+      res.status(200).json({ message: 'Cart item added/updated successfully' });
+  } catch (error) {
+      console.error('Error updating cart item:', error);
+      res.status(500).json({ error: 'Failed to add/update cart item' });
+  }
+}
+
+export async function deleteCartItem(req: Request, res: Response) {
+  const { email, productId } = req.params;
+
+  try {
+      const userDB = new UserDB();
+      await userDB.removeCartItemByEmail(email, productId);
+      res.status(200).json({ message: 'Cart item removed successfully' });
+  } catch (error) {
+      console.error('Error removing cart item:', error);
+      res.status(500).json({ error: 'Failed to remove cart item' });
+  }
+}

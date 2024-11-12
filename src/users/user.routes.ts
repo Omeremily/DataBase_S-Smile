@@ -14,7 +14,10 @@ import {
     getActivityLevelDistribution,
     saveMenu,
     getUserMenus,
-    getUserByEmail
+    getUserByEmail,
+    getUserCart,
+    addOrUpdateCartItem,
+    deleteCartItem
 } 
 from './user.controller';
 
@@ -39,7 +42,9 @@ userRouter.post('/saveMenu', saveMenu);
 userRouter.get('/menus/:email', getUserMenus);
 userRouter.get('/getUserByEmail/:email', getUserByEmail);
 
-
+userRouter.get('/cart/:email', getUserCart); // Fetch cart
+userRouter.put('/cart/:email', addOrUpdateCartItem); // Add/update item
+userRouter.delete('/cart/:email/:productId', deleteCartItem); // Delete item
 
 
 

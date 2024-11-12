@@ -5,8 +5,8 @@ export type User = {
     _id?: ObjectId;
     firstName: string;
     lastName: string;
-    password: string; // Password should not be optional if required for registration
-    email: string; // Email should be mandatory for login/register
+    password: string; 
+    email: string; 
     isAdmin?: boolean;
     currentWeight?: number;
     goalWeight?: number;
@@ -28,11 +28,6 @@ export type User = {
       isCompleted?: boolean; // Track if the user has completed this week's challenge
   }[];
 
-    cart?: {
-      productId: string;
-      quantity: number;
-  }[];
-
   menus?: {
     menuId: string;
     date: Date;
@@ -45,6 +40,13 @@ export type User = {
     totalMacros: { protein: number; carbs: number; fat: number; calories: number };
 }[];
 
+  cart?: {
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    imageURL: string;
+  }[];
 }
 
 export type FoodItem = {
@@ -54,7 +56,7 @@ export type FoodItem = {
   protein: number;
   fat: number;
   carbs: number;
-  quantity: number; // Adjust based on your data structure
+  quantity: number; 
 };
 
 export async function getAllUsers(): Promise<User[]> {
@@ -189,6 +191,3 @@ export async function fetchActivityLevelDistribution(): Promise<{ [key: string]:
       throw new Error('Failed to get activity level distribution');
   }
 }
-
-
-//store
