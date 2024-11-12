@@ -146,11 +146,14 @@ async addMenuToUser(userId: string, menu: any): Promise<void> {
       const result = await client.db(this.db_name).collection(this.collection).updateOne(query, update);
 
       if (result.matchedCount === 0) {
+          console.error("User not found with userId:", userId);
           throw new Error("User not found");
       }
   } catch (error) {
-      console.error('Failed to add menu to user', error);
+      console.error('Failed to add menu to user in UserDB:', error);
       throw new Error("Error adding menu to user");
+  } finally {
+      await client.close();
   }
 }
   

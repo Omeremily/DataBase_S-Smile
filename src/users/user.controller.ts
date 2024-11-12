@@ -274,9 +274,15 @@ export function editDailyMenu(req: Request, res: Response) {
 }
 
 
-export async function saveMenu(req: Request, res: Response) {
+export const saveMenu = async (req: Request, res: Response) => {
   try {
       const { userId, meals, totalMacros } = req.body;
+
+      // Check if required fields are provided
+      if (!userId || !meals || !totalMacros) {
+          console.error('Missing required fields in request body:', { userId, meals, totalMacros });
+          return res.status(400).json({ message: "Missing data in request body" });
+      }
 
       const menu = {
           menuId: new ObjectId().toString(),
@@ -285,12 +291,13 @@ export async function saveMenu(req: Request, res: Response) {
           totalMacros,
       };
 
+      // Attempt to save the menu to the user's record
       const userDB = new UserDB();
       await userDB.addMenuToUser(userId, menu);
 
       res.status(200).json({ message: "Menu saved successfully", menu });
   } catch (error) {
-      console.error('Failed to save menu', error);
-      res.status(500).json({ error: "Error saving menu" });
+      console.error('Error saving menu:', error); // Log the exact error
+      res.status(500).json({ error: "Error saving menu", details: error.message });
   }
-}
+};
