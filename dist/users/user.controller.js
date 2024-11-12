@@ -275,7 +275,7 @@ async function addOrUpdateCartItem(req, res) {
         res.status(200).json({ message: 'Cart item added/updated successfully' });
     }
     catch (error) {
-        console.error('Error updating cart item:', error);
+        console.error('Error updating cart item:', error.message);
         res.status(500).json({ error: 'Failed to add/update cart item' });
     }
 }

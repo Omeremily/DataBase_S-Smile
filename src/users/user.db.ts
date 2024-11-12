@@ -177,24 +177,40 @@ async findUserByEmail(email: string): Promise<User | null> {
 async addOrUpdateCartItemByEmail(email: string, item: any): Promise<void> {
   const client = await getClient();
   try {
-      // Find the user and update the cart item if it exists; otherwise, push a new item
-      const result = await client.db(this.db_name).collection(this.collection).updateOne(
-          { email, "cart.productId": item.productId },
-          { $set: { "cart.$": item } },  // Update existing item in cart array
-          { upsert: true }  // If no user or item exists, add a new cart entry
-      );
+      const userCollection = client.db(this.db_name).collection(this.collection);
 
-      if (result.matchedCount === 0 && !result.upsertedId) {
-          console.error("User not found or item not updated.");
-          throw new Error("User or cart item not found.");
+      // Step 1: Check if user exists
+      const user = await userCollection.findOne({ email });
+      if (!user) {
+          throw new Error("User not found");
       }
+
+      // Step 2: Check if the item already exists in the cart
+      const existingCartItem = user.cart?.find((cartItem: any) => cartItem.productId === item.productId);
+
+      if (existingCartItem) {
+          // Step 3a: Update quantity of the existing item
+          await userCollection.updateOne(
+              { email, "cart.productId": item.productId },
+              { $set: { "cart.$.quantity": existingCartItem.quantity + item.quantity } }
+          );
+      } else {
+          // Step 3b: Add new item to the cart
+          await userCollection.updateOne(
+              { email },
+              { $push: { cart: item } }
+          );
+      }
+
+      console.log("Cart item added or updated successfully.");
   } catch (error) {
-      console.error('Error in addOrUpdateCartItemByEmail:', error);
+      console.error('Error in addOrUpdateCartItemByEmail:', (error as Error).message);
       throw new Error("Failed to add or update cart item");
   } finally {
       await client.close();
   }
 }
+
 
 
 
