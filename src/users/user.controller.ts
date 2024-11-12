@@ -289,6 +289,22 @@ export async function getUserByEmail(req: Request, res: Response) {
   }
 }
 
+export async function getUserMenus(req: Request, res: Response) {
+  try {
+      const { email } = req.params;
+      const userDB = new UserDB();
+      const user = await userDB.findUserByEmail(email);
+
+      if (!user || !user.menus) {
+          return res.status(404).json({ error: "No menus found for this user" });
+      }
+
+      res.status(200).json(user.menus);
+  } catch (error) {
+      console.error('Error fetching menus:', error);
+      res.status(500).json({ error: "Error retrieving menus" });
+  }
+}
 
 export const saveMenu = async (req: Request, res: Response) => {
   try {
@@ -318,6 +334,4 @@ export const saveMenu = async (req: Request, res: Response) => {
           res.status(500).json({ error: "Error saving menu", details: "Unexpected error" });
       }
   }
-
-  
 };

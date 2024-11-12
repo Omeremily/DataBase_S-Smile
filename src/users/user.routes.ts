@@ -12,7 +12,8 @@ import {
     countUsers,
     getUsersWeight,    
     getActivityLevelDistribution,
-    saveMenu 
+    saveMenu,
+    getUserMenus
 } 
 from './user.controller';
 
@@ -34,6 +35,8 @@ userRouter.post('/add', addUser);
 userRouter.get('/countUsers', countUsers); 
 userRouter.get('/weights', getUsersWeight);
 userRouter.post('/saveMenu', saveMenu);
+userRouter.get('/menus/:email', getUserMenus);
+
 
 
 

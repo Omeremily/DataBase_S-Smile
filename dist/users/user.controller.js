@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveMenu = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
+exports.saveMenu = exports.getUserByEmail = exports.editDailyMenu = exports.deleteDailyMenu = exports.getDailyMenu = exports.createDailyMenu = exports.purchaseInStore = exports.deletePhotoFromGallery = exports.addPhotoToGallery = exports.getActivityLevelDistribution = exports.getUsersWeight = exports.countUsers = exports.deleteUser = exports.editUser = exports.register = exports.Login = exports.addUser = exports.getUserById = exports.getUsersName = exports.getUsers = void 0;
 const user_model_1 = require("./user.model");
 const mongodb_1 = require("mongodb");
 const utils_1 = require("../utils/utils");
@@ -255,11 +255,26 @@ function editDailyMenu(req, res) {
     }
 }
 exports.editDailyMenu = editDailyMenu;
+async function getUserByEmail(req, res) {
+    try {
+        const { email } = req.params;
+        const userDB = new user_db_1.UserDB();
+        const user = await userDB.findUserByEmail(email);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json(user);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve user' });
+    }
+}
+exports.getUserByEmail = getUserByEmail;
 const saveMenu = async (req, res) => {
     try {
-        const { userId, meals, totalMacros } = req.body;
-        if (!userId || !meals || !totalMacros) {
-            console.error('Missing required fields in request body:', { userId, meals, totalMacros });
+        const { email, meals, totalMacros } = req.body;
+        if (!email || !meals || !totalMacros) {
+            console.error('Missing required fields in request body:', { email, meals, totalMacros });
             return res.status(400).json({ message: "Missing data in request body" });
         }
         const menu = {
@@ -269,17 +284,15 @@ const saveMenu = async (req, res) => {
             totalMacros,
         };
         const userDB = new user_db_1.UserDB();
-        await userDB.addMenuToUser(userId, menu);
+        await userDB.addMenuToUserByEmail(email, menu);
         res.status(200).json({ message: "Menu saved successfully", menu });
     }
     catch (error) {
-        if (error instanceof Error) { // Type guard to check if error is of type Error
+        if (error instanceof Error) {
             console.error('Error saving menu:', error.message);
             res.status(500).json({ error: "Error saving menu", details: error.message });
         }
         else {
-            // Handle cases where error is not an instance of Error
-            console.error('Unexpected error saving menu');
             res.status(500).json({ error: "Error saving menu", details: "Unexpected error" });
         }
     }

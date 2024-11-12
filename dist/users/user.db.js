@@ -128,25 +128,36 @@ class UserDB {
             await client.close();
         }
     }
-    async addMenuToUser(userId, menu) {
+    async addMenuToUserByEmail(email, menu) {
         const client = await getClient();
         try {
-            const query = { _id: new mongodb_1.ObjectId(userId) };
+            const query = { email };
             const update = { $push: { menus: menu } };
             const result = await client.db(this.db_name).collection(this.collection).updateOne(query, update);
             if (result.matchedCount === 0) {
-                throw new Error(`User not found for ID: ${userId}`);
-            }
-            else if (result.modifiedCount === 0) {
-                throw new Error(`No changes made to the user's menus field. Check permissions or document structure.`);
+                console.error(`User not found with email: ${email}`);
+                throw new Error("User not found");
             }
             else {
-                console.log(`Menu added successfully to user with userId: ${userId}`);
+                console.log(`Menu added successfully to user with email: ${email}`);
             }
         }
         catch (error) {
-            console.error('Detailed error in addMenuToUser:', error);
-            throw new Error("Error adding menu to user: " + error.message);
+            console.error('Failed to add menu to user in UserDB:', error);
+            throw new Error("Error adding menu to user");
+        }
+        finally {
+            await client.close();
+        }
+    }
+    async findUserByEmail(email) {
+        const client = await getClient();
+        try {
+            return await client.db(this.db_name).collection(this.collection).findOne({ email });
+        }
+        catch (error) {
+            console.error('Error finding user by email:', error);
+            throw new Error("Error finding user");
         }
         finally {
             await client.close();
