@@ -177,18 +177,25 @@ async findUserByEmail(email: string): Promise<User | null> {
 async addOrUpdateCartItemByEmail(email: string, item: any): Promise<void> {
   const client = await getClient();
   try {
-      await client.db(this.db_name).collection(this.collection).updateOne(
+      // Find the user and update the cart item if it exists; otherwise, push a new item
+      const result = await client.db(this.db_name).collection(this.collection).updateOne(
           { email, "cart.productId": item.productId },
-          { $set: { "cart.$": item } }, // Update existing item
-          { upsert: true } // If not found, insert as new
+          { $set: { "cart.$": item } },  // Update existing item in cart array
+          { upsert: true }  // If no user or item exists, add a new cart entry
       );
+
+      if (result.matchedCount === 0 && !result.upsertedId) {
+          console.error("User not found or item not updated.");
+          throw new Error("User or cart item not found.");
+      }
   } catch (error) {
-      console.error('Error adding/updating cart item:', error);
+      console.error('Error in addOrUpdateCartItemByEmail:', error);
       throw new Error("Failed to add or update cart item");
   } finally {
       await client.close();
   }
 }
+
 
 
 async removeCartItemByEmail(email: string, productId: string): Promise<void> {

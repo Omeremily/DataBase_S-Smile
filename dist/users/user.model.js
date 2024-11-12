@@ -146,5 +146,4 @@ async function fetchActivityLevelDistribution() {
     }
 }
 exports.fetchActivityLevelDistribution = fetchActivityLevelDistribution;
-//store
 //# sourceMappingURL=user.model.js.map

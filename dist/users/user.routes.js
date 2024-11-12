@@ -20,6 +20,9 @@ userRouter.get('/weights', user_controller_1.getUsersWeight);
 userRouter.post('/saveMenu', user_controller_1.saveMenu);
 userRouter.get('/menus/:email', user_controller_1.getUserMenus);
 userRouter.get('/getUserByEmail/:email', user_controller_1.getUserByEmail);
+userRouter.get('/cart/:email', user_controller_1.getUserCart); // Fetch cart
+userRouter.put('/cart/:email', user_controller_1.addOrUpdateCartItem); // Add/update item
+userRouter.delete('/cart/:email/:productId', user_controller_1.deleteCartItem); // Delete item
 // export 
 exports.default = userRouter;
 //# sourceMappingURL=user.routes.js.map

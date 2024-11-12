@@ -303,10 +303,11 @@ export async function addOrUpdateCartItem(req: Request, res: Response) {
       await userDB.addOrUpdateCartItemByEmail(email, { productId, name, price, quantity, imageURL });
       res.status(200).json({ message: 'Cart item added/updated successfully' });
   } catch (error) {
-      console.error('Error updating cart item:', error);
-      res.status(500).json({ error: 'Failed to add/update cart item' });
-  }
+    console.error('Error updating cart item:', (error as Error).message); 
+    res.status(500).json({ error: 'Failed to add/update cart item' });
 }
+}
+
 
 export async function deleteCartItem(req: Request, res: Response) {
   const { email, productId } = req.params;

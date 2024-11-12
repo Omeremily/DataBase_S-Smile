@@ -163,6 +163,37 @@ class UserDB {
             await client.close();
         }
     }
+    //Store
+    async addOrUpdateCartItemByEmail(email, item) {
+        const client = await getClient();
+        try {
+            await client.db(this.db_name).collection(this.collection).updateOne({ email, "cart.productId": item.productId }, { $set: { "cart.$": item } }, // Update existing item
+            { upsert: true } // If not found, insert as new
+            );
+        }
+        catch (error) {
+            console.error('Error adding/updating cart item:', error);
+            throw new Error("Failed to add or update cart item");
+        }
+        finally {
+            await client.close();
+        }
+    }
+    async removeCartItemByEmail(email, productId) {
+        const client = await getClient();
+        try {
+            const filter = { email };
+            const update = { $pull: { cart: { productId } } };
+            await client.db(this.db_name).collection(this.collection).updateOne(filter, update);
+        }
+        catch (error) {
+            console.error('Error removing cart item:', error);
+            throw new Error("Failed to remove cart item");
+        }
+        finally {
+            await client.close();
+        }
+    }
 }
 exports.UserDB = UserDB;
 //# sourceMappingURL=user.db.js.map
