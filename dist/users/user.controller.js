@@ -255,9 +255,13 @@ function editDailyMenu(req, res) {
     }
 }
 exports.editDailyMenu = editDailyMenu;
-async function saveMenu(req, res) {
+const saveMenu = async (req, res) => {
     try {
         const { userId, meals, totalMacros } = req.body;
+        if (!userId || !meals || !totalMacros) {
+            console.error('Missing required fields in request body:', { userId, meals, totalMacros });
+            return res.status(400).json({ message: "Missing data in request body" });
+        }
         const menu = {
             menuId: new mongodb_1.ObjectId().toString(),
             date: new Date(),
@@ -269,9 +273,16 @@ async function saveMenu(req, res) {
         res.status(200).json({ message: "Menu saved successfully", menu });
     }
     catch (error) {
-        console.error('Failed to save menu', error);
-        res.status(500).json({ error: "Error saving menu" });
+        if (error instanceof Error) { // Type guard to check if error is of type Error
+            console.error('Error saving menu:', error.message);
+            res.status(500).json({ error: "Error saving menu", details: error.message });
+        }
+        else {
+            // Handle cases where error is not an instance of Error
+            console.error('Unexpected error saving menu');
+            res.status(500).json({ error: "Error saving menu", details: "Unexpected error" });
+        }
     }
-}
+};
 exports.saveMenu = saveMenu;
 //# sourceMappingURL=user.controller.js.map
