@@ -43,12 +43,12 @@ export async function getUserById(req: Request, res: Response) {
 export async function addUser(req: Request, res: Response) {
   try {
     
-    let { firstName, lastName, email, password, birthDate, isAdmin, currentWeight } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    let { firstName, lastName, email, password, dateOfBirth, isAdmin, currentWeight } = req.body;
+    if (!firstName || !lastName || !email || !password || !dateOfBirth) {
       return res.status(400).json({ error: 'Missing information' });
     }
 
-    let user: User = { firstName, lastName, email, password: encryptPassword(password), isAdmin, currentWeight };
+    let user: User = { firstName, lastName, email, password: encryptPassword(password), isAdmin, currentWeight, dateOfBirth };
     let result = await add(user);
 
     if (!result.insertedId) {
@@ -92,13 +92,14 @@ export async function register(req: Request, res: Response) {
     gender,
     height,
     goalWeight,
+    dateOfBirth,
     targetDate,
     activityLevel,
     profileImageUrl, // Add profileImageUrl as an optional field
   } = req.body;
 
   // Check for required fields
-  if (!email || !password || !firstName || !lastName || !startWeight) {
+  if (!email || !password || !firstName || !lastName || !startWeight || !dateOfBirth) {
     return res.status(400).json({ error: 'Missing required information' });
   }
 
@@ -122,6 +123,7 @@ export async function register(req: Request, res: Response) {
       targetDate,
       activityLevel,
       profileImageUrl, // Set profileImageUrl if provided
+      dateOfBirth
     };
 
     // Call to register user in the database

@@ -18,6 +18,7 @@ export type User = {
     activityLevel?: string;
     gallery?: string[];
     profileImageUrl?: string;
+    dateOfBirth?: Date;
 
     weeklyGoals?: {
       goalType: 'calories' | 'steps' | 'workouts' | 'hydration' | 'sleep';

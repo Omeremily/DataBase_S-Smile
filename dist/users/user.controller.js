@@ -46,7 +46,7 @@ async function getUserById(req, res) {
 exports.getUserById = getUserById;
 async function addUser(req, res) {
     try {
-        let { firstName, lastName, email, password, birthDate, isAdmin, currentWeight } = req.body;
+        let { firstName, lastName, email, password, isAdmin, currentWeight } = req.body;
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ error: 'Missing information' });
         }
@@ -81,7 +81,7 @@ async function Login(req, res) {
 }
 exports.Login = Login;
 async function register(req, res) {
-    const { email, password, firstName, lastName, isAdmin, startWeight, currentWeight, phoneNumber, gender, height, goalWeight, targetDate, activityLevel, profileImageUrl, // Add profileImageUrl as an optional field
+    const { email, password, firstName, lastName, isAdmin, startWeight, currentWeight, phoneNumber, gender, height, goalWeight, targetDate, dateOfBirth, activityLevel, profileImageUrl, // Add profileImageUrl as an optional field
      } = req.body;
     // Check for required fields
     if (!email || !password || !firstName || !lastName || !startWeight) {
@@ -104,6 +104,7 @@ async function register(req, res) {
             gender,
             height,
             targetDate,
+            dateOfBirth,
             activityLevel,
             profileImageUrl, // Set profileImageUrl if provided
         };
