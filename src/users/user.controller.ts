@@ -95,7 +95,7 @@ export async function register(req: Request, res: Response) {
     dateOfBirth,
     targetDate,
     activityLevel,
-    profileImageUrl, // Add profileImageUrl as an optional field
+    profileImageUrl,
   } = req.body;
 
   // Check for required fields
@@ -104,10 +104,10 @@ export async function register(req: Request, res: Response) {
   }
 
   try {
-    // If currentWeight is not provided, set it to startWeight
+    // באופן דיפולטיבי כשמשתמש נרשם משקלו הנוכחי יהיה משקלו ההתחלתי
     const initialCurrentWeight = currentWeight ?? startWeight;
 
-    // Create user object with all fields, including the optional profileImageUrl
+    // יצירת אובייקט מסוג יוזר עם כל התכונות
     let user: User = {
       email,
       password: encryptPassword(password), 
@@ -126,7 +126,7 @@ export async function register(req: Request, res: Response) {
       dateOfBirth
     };
 
-    // Call to register user in the database
+    // שליחה לפונקציות שממודאות שכבר אין משתמש כזה ובמידה ולא מכניסות אותו לרשימת המשתמשים בדאטה בייס
     let result = await registerUser(user);
     console.log('result ==> ', result);
 

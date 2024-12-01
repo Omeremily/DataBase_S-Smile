@@ -148,9 +148,9 @@ export async function loginUser(email: string): Promise<User> {
 export async function registerUser(user: User): Promise<any> {
     try {
         let query = { email: user.email };
-        let userExists = await new UserDB().findAll(query);
-        if (userExists.length > 0) throw new Error("User already exists");
-        return await new UserDB().insertUser(user);
+        let userExists = await new UserDB().findAll(query); //שולח לפונקציה שעוברת על כל מערך המשתמשים 
+        if (userExists.length > 0) throw new Error("User already exists"); //מקרה שכבר יש משתמש כזה
+        return await new UserDB().insertUser(user); 
     } catch (error) {
         console.error('Failed to register user', error);
         throw new Error("Registration failed");

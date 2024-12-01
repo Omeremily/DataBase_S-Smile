@@ -41,6 +41,7 @@ export class UserDB {
               throw new Error("User already exists");
             }
             
+            //הפונקציה מכניסה את המשתמש לדאטה בייס
             return await client.db(this.db_name).collection(this.collection).insertOne(user);
           } catch (error) {
             if (error instanceof Error) {
